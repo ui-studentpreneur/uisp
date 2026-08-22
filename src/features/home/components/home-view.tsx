@@ -1,6 +1,7 @@
 import { HeroSection } from "./hero-section";
 import { TimelineSection } from "./timeline-section";
 import MilestoneSection from "./milestone";
+import SpeakerSection from "./speaker";
 
 /**
  * The feature's screen-level component. `app/(marketing)/page.tsx` renders
@@ -15,6 +16,7 @@ export async function HomeView() {
       <HeroSection />
       <TimelineSection />
       <MilestoneSection />
+      <SpeakerSection />
     </main>
   );
 }

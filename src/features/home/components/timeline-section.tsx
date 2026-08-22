@@ -31,7 +31,7 @@ export function TimelineSection() {
   return (
     <section id="timeline" className="relative isolate flex items-center">
       <div className="flex w-full flex-col items-center gap-6 py-24  text-center max-md:gap-4">
-        <h2 className="text-gradient-gold text-3xl font-semibold tracking-tight sm:text-4xl">
+        <h2 className="text-gradient-gold text-3xl font-bold tracking-tight sm:text-4xl">
           Our Timeline
         </h2>
 

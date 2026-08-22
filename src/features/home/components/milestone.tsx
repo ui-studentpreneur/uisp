@@ -19,8 +19,8 @@ const data = [
 const MilestoneSection = () => {
   return (
     <section id="milestone" className="relative isolate flex items-center">
-      <div className="flex w-full flex-col items-center gap-6 py-24 text-center max-md:gap-4">
-        <h2 className="text-gradient-gold text-3xl font-semibold tracking-tight sm:text-4xl">
+      <div className="flex w-full flex-col items-center gap-20 max-md:gap-10 py-24 text-center">
+        <h2 className="text-gradient-gold text-3xl font-bold tracking-tight sm:text-4xl">
           Our Milestones
         </h2>
 
