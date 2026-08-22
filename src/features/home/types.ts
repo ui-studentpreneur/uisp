@@ -6,3 +6,13 @@ export type Highlight = {
   description: string;
   href: string;
 };
+
+export type TimelineItem = {
+  date: string;
+  title: string;
+};
+
+export type MilestoneItem = {
+  image: string;
+  title: string;
+}

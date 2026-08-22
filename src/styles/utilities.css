@@ -7,6 +7,9 @@
 @utility bg-gradient-donker {
   background-image: var(--gradient-donker);
 }
+@utility bg-gradient-timeline {
+  background-image: var(--gradient-timeline);
+}
 
 /* Gradient-filled text. Pair with a fallback colour for unsupported clients. */
 @utility text-gradient-gold {
@@ -17,6 +20,11 @@
 
 @utility text-gradient-donker {
   background-image: var(--gradient-donker);
+  background-clip: text;
+  color: transparent;
+}
+@utility text-gradient-timeline {
+  background-image: var(--gradient-timeline);
   background-clip: text;
   color: transparent;
 }

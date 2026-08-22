@@ -1,9 +1,6 @@
-import { Container } from "@/components/ui";
-
-import { getHighlights } from "../server/queries";
-
 import { HeroSection } from "./hero-section";
-import { HighlightGrid } from "./highlight-grid";
+import { TimelineSection } from "./timeline-section";
+import MilestoneSection from "./milestone";
 
 /**
  * The feature's screen-level component. `app/(marketing)/page.tsx` renders
@@ -13,14 +10,11 @@ import { HighlightGrid } from "./highlight-grid";
  * should stay on the page measure wraps itself in `Container`.
  */
 export async function HomeView() {
-  const highlights = await getHighlights();
-
   return (
-    <>
+    <main className="bg-gradient-donker">
       <HeroSection />
-      <Container className="py-20">
-        <HighlightGrid highlights={highlights} />
-      </Container>
-    </>
+      <TimelineSection />
+      <MilestoneSection />
+    </main>
   );
 }
