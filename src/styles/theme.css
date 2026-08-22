@@ -1,0 +1,54 @@
+/**
+ * Design tokens. Single source of truth for brand colour, type and gradients.
+ *
+ * Tailwind v4 derives utilities from the `@theme` namespaces:
+ *   --color-*  →  bg-*, text-*, border-*, ring-*, from-*, …
+ *   --font-*   →  font-*
+ */
+
+@theme static {
+  /* Gold — primary brand ramp */
+  --color-gold-50: #fef8f5;
+  --color-gold-100: #fce9df;
+  --color-gold-200: #faded0;
+  --color-gold-300: #f8cfbb;
+  --color-gold-400: #f7c6ad;
+  --color-gold-500: #f5b899;
+  --color-gold-600: #dfa78b;
+  --color-gold-700: #ae836d;
+  --color-gold-800: #876554;
+  --color-gold-900: #674d40;
+
+  /* Blue — surfaces and text */
+  --color-blue-50: #e9ebee;
+  --color-blue-100: #bac0c9;
+  --color-blue-200: #98a2af;
+  --color-blue-300: #69788b;
+  --color-blue-400: #4c5d75;
+  --color-blue-500: #1f3552;
+  --color-blue-600: #1c304b;
+  --color-blue-700: #16263a;
+  --color-blue-800: #111d2d;
+  --color-blue-900: #0d1622;
+}
+
+/**
+ * Gradients are not a Tailwind namespace, so they live as plain custom
+ * properties and are consumed by the `bg-gradient-*` / `text-gradient-*`
+ * utilities in `utilities.css`. Referencing the var directly also works:
+ * `style={{ backgroundImage: "var(--gradient-gold)" }}`.
+ */
+:root {
+  --gradient-gold: linear-gradient(
+    186deg,
+    #f5b899 27.06%,
+    #f6d6bf 47.39%,
+    #b17763 88.95%
+  );
+  --gradient-donker: linear-gradient(
+    1deg,
+    #1a232f 3.83%,
+    #1f3552 51.66%,
+    #1a232f 98.77%
+  );
+}

@@ -1,0 +1,22 @@
+/** Project utilities. Keep this list short — prefer a component in `ui/`. */
+
+@utility bg-gradient-gold {
+  background-image: var(--gradient-gold);
+}
+
+@utility bg-gradient-donker {
+  background-image: var(--gradient-donker);
+}
+
+/* Gradient-filled text. Pair with a fallback colour for unsupported clients. */
+@utility text-gradient-gold {
+  background-image: var(--gradient-gold);
+  background-clip: text;
+  color: transparent;
+}
+
+@utility text-gradient-donker {
+  background-image: var(--gradient-donker);
+  background-clip: text;
+  color: transparent;
+}

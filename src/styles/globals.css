@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "./theme.css";
+@import "./utilities.css";
 
 /* Explicit scan root: every source file lives under `src/`. Keeps class
    detection correct no matter where this stylesheet is imported from. */
@@ -6,20 +8,20 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: var(--color-blue-900);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-raleway);
   --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: var(--color-blue-900);
+    --foreground: var(--color-blue-50);
   }
 }
 

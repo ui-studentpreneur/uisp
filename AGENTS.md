@@ -52,7 +52,10 @@ src/
 ├── config/                 STATIC CONFIG — env, routes, navigation, site meta
 ├── hooks/                  cross-feature client hooks
 ├── types/                  types shared by more than one feature
-├── styles/globals.css      Tailwind entry, theme tokens
+├── styles/                 DESIGN TOKENS
+│   ├── globals.css         Tailwind entry, semantic colours, dark mode
+│   ├── theme.css           gold/blue ramps, gradient custom properties
+│   └── utilities.css       @utility gradient classes
 └── proxy.ts                Next 16 middleware (composition root only)
 ```
 
@@ -117,8 +120,56 @@ Add the path to `src/config/routes.ts` and link via `routes.*` — never a hardc
 - **Server Actions return `Result<T>`**, not thrown errors — a thrown error reaches the client as an opaque digest in production. See `src/lib/utils/result.ts`.
 - **`process.env` is read in `src/config/env.ts` only.** `clientEnv` is safe anywhere; `serverEnv()` is a lazy getter so a missing secret fails on first server use instead of breaking the client build. New variables get documented in `.env.example`.
 - **No `fetch` inside components.** Data access goes through `features/<x>/server/queries.ts`, which may use `createHttpClient` from `lib/api`.
-- **Styling is Tailwind + `cn()`.** Variant maps live at the top of the component file (see `components/ui/button.tsx`). `globals.css` declares `@source "../"` so class detection works from `src/styles/`.
+- **Styling is Tailwind + `cn()`.** Variant maps live at the top of the component file (see `components/ui/button.tsx`). Use design tokens, never raw hex — see [Design tokens](#design-tokens).
 - **Tests colocate** as `<file>.test.ts(x)` next to the source. No runner is installed yet.
+
+## Design tokens
+
+Tailwind v4 has no JS config — tokens are CSS, split across three files:
+
+| File | Holds |
+|---|---|
+| `styles/theme.css` | brand ramps (`@theme static`) + gradient custom properties |
+| `styles/utilities.css` | `@utility` gradient classes |
+| `styles/globals.css` | entry: imports the above, semantic `background`/`foreground`, dark mode |
+
+**Never write a raw hex value in a component.** If a colour is missing from the ramp, add it to `theme.css`.
+
+### Colour
+
+Two ramps, `50`–`900`, each generating the full utility set (`bg-`, `text-`, `border-`, `ring-`, `from-`/`via-`/`to-`, …):
+
+- **`gold-*`** — primary brand, warm peach. `gold-500` (`#f5b899`) is the base.
+- **`blue-*`** — surfaces and text, deep navy. `blue-500` (`#1f3552`) is the base.
+
+```tsx
+<div className="bg-blue-900 text-gold-100 border-gold-700" />
+```
+
+Semantic aliases `bg-background` / `text-foreground` resolve to white on `blue-900` in light mode and `blue-900` on `blue-50` in dark, switching on `prefers-color-scheme`. Prefer them for page-level surfaces so dark mode keeps working; use the ramps directly for deliberate brand accents.
+
+### Gradients
+
+Declared as `--gradient-gold` and `--gradient-donker` in `theme.css`, exposed through four utilities:
+
+```tsx
+<section className="bg-gradient-donker" />   {/* background */}
+<h1 className="text-gradient-gold" />        {/* gradient-filled text */}
+```
+
+Also `bg-gradient-gold` and `text-gradient-donker`. The `text-gradient-*` utilities set `background-clip: text` with a transparent colour — give the element real text, and note it cannot also carry a background.
+
+Gradients are not a Tailwind namespace, so they are plain custom properties. Referencing the var directly is fine where a utility does not fit: `style={{ backgroundImage: "var(--gradient-gold)" }}`.
+
+### Type
+
+**Raleway** is the sans face, loaded in `app/layout.tsx` via `next/font/google` and bound to `--font-sans`, so `font-sans` (already on `<body>`) resolves to it. Geist Mono remains as `font-mono`.
+
+### Why `@theme static`
+
+`theme.css` uses `@theme static`, not plain `@theme`. Tailwind tree-shakes theme variables it does not see used, which would leave `var(--color-gold-500)` undefined for anything referencing it outside a utility class — inline styles, hand-written CSS, third-party components. `static` emits the whole ramp to `:root` unconditionally. The cost is a few hundred bytes; keep it.
+
+Utilities themselves are still generated on demand, so unused classes cost nothing.
 
 ## Next.js 16 specifics
 
