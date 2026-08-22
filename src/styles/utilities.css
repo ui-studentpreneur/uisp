@@ -51,10 +51,19 @@
     border-radius: inherit;
     /* The ring band IS this padding, so zeroing a side removes that edge —
        e.g. `--border-gradient-width-top: 0px` for a panel that butts against
-       the navbar. Done with a variable rather than a `before:pt-0` override so
-       it cannot lose a specificity tie to Tailwind's emit order. */
+       the navbar. Every side falls back to `--border-gradient-width`, which
+       falls back to 2px, so you can set one knob or all four:
+
+         --border-gradient-width         all sides
+         --border-gradient-width-top     top edge
+         --border-gradient-width-x       left + right edges
+         --border-gradient-width-bottom  bottom edge
+
+       Done with variables rather than a `before:pt-0` override so this cannot
+       lose a specificity tie to Tailwind's emit order. */
     padding: var(--border-gradient-width-top, var(--border-gradient-width, 2px))
-      var(--border-gradient-width, 2px) var(--border-gradient-width, 2px);
+      var(--border-gradient-width-x, var(--border-gradient-width, 2px))
+      var(--border-gradient-width-bottom, var(--border-gradient-width, 2px));
     background-image: var(--gradient-gold);
     -webkit-mask:
       linear-gradient(#fff 0 0) content-box,

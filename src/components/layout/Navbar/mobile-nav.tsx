@@ -34,7 +34,7 @@ export function MobileNav({ items }: { items: readonly NavItem[] }) {
       <div
         id="mobile-nav-panel"
         ref={panel}
-        className="invisible absolute inset-x-0 top-full h-0 overflow-hidden rounded-b-2xl border-gradient-gold bg-gradient-donker shadow-xl shadow-black/40 [--border-gradient-width-top:0px]"
+        className="invisible absolute inset-x-0 top-full h-0 overflow-hidden rounded-b-2xl border-gradient-gold bg-gradient-donker shadow-xl shadow-black/40 [--border-gradient-width-top:0px] [--border-gradient-width-x:0px]"
       >
         <ul className="space-y-1 p-2">
           {items.map((item) => (
