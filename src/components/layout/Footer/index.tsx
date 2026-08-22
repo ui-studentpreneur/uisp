@@ -28,7 +28,7 @@ export function SiteFooter() {
         className="pointer-events-none absolute inset-x-0 bottom-0 opacity-50 -z-10 h-auto w-full"
       />
 
-      <Container className="relative pt-14 pb-60">
+      <Container className="relative pt-20 max-md:pt-16 pb-60 max-md:pb-30">
         <div className="flex flex-col gap-12 lg:flex-row lg:items-start lg:justify-between lg:gap-20">
           <FooterBrand />
           <ContactList />
