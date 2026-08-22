@@ -14,8 +14,12 @@ export default function GlobalError({
 }) {
   return (
     <html lang="en">
-      <body style={{ fontFamily: "system-ui, sans-serif", padding: "4rem 1.5rem" }}>
-        <h1 style={{ fontSize: "1.5rem", fontWeight: 600 }}>Application error</h1>
+      <body
+        style={{ fontFamily: "system-ui, sans-serif", padding: "4rem 1.5rem" }}
+      >
+        <h1 style={{ fontSize: "1.5rem", fontWeight: 600 }}>
+          Application error
+        </h1>
         <p style={{ marginTop: "0.5rem", color: "#666" }}>
           {error.digest ? `Reference: ${error.digest}` : "Please try again."}
         </p>

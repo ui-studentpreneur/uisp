@@ -1,36 +1,11 @@
-type ClassValue =
-  | string
-  | number
-  | null
-  | undefined
-  | false
-  | ClassValue[]
-  | Record<string, boolean | null | undefined>;
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 /**
- * Conditional className joiner.
- *
- * Deliberately dependency-free. If the project later adds `clsx` +
- * `tailwind-merge`, replace this body with
- * `twMerge(clsx(inputs))` — every call site already has the right shape.
+ * Conditional className joiner with Tailwind conflict resolution.
+ * `twMerge` makes a later class win over an earlier one for the same property,
+ * which is what lets callers override component defaults via `className`.
  */
 export function cn(...inputs: ClassValue[]): string {
-  const out: string[] = [];
-
-  for (const input of inputs) {
-    if (!input) continue;
-
-    if (typeof input === "string" || typeof input === "number") {
-      out.push(String(input));
-    } else if (Array.isArray(input)) {
-      const nested = cn(...input);
-      if (nested) out.push(nested);
-    } else {
-      for (const [key, active] of Object.entries(input)) {
-        if (active) out.push(key);
-      }
-    }
-  }
-
-  return out.join(" ");
+  return twMerge(clsx(inputs));
 }

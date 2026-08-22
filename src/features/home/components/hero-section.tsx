@@ -14,9 +14,9 @@ export function HeroSection() {
         </code>
         .
       </p>
-      <a href="https://nextjs.org/docs" target="_blank" rel="noreferrer">
-        <Button size="lg">Read the docs</Button>
-      </a>
+      {/* <a href="https://nextjs.org/docs" target="_blank" rel="noreferrer"> */}
+      <Button size="lg">Read the docs</Button>
+      {/* </a> */}
     </section>
   );
 }

@@ -159,7 +159,32 @@ Declared as `--gradient-gold` and `--gradient-donker` in `theme.css`, exposed th
 
 Also `bg-gradient-gold` and `text-gradient-donker`. The `text-gradient-*` utilities set `background-clip: text` with a transparent colour — give the element real text, and note it cannot also carry a background.
 
+`border-gradient-gold` draws a gold gradient border. CSS has no gradient `border-color`, so it is not a border: a `::before` is filled with the gradient and masked (`mask-composite: exclude`) down to a ring. It inherits `border-radius`, so it follows `rounded-full` automatically. Thickness is `--border-gradient-width`, default `2px`. **The caller must establish the containing block** (`relative`, `absolute`, …) — the utility deliberately sets no `position`, because doing so silently overrode `absolute` on elements that needed it, with the winner decided by Tailwind's emit order.
+
+`border-image` is the only true gradient-border property and it ignores `border-radius`, so it cannot produce a pill — do not switch to it.
+
 Gradients are not a Tailwind namespace, so they are plain custom properties. Referencing the var directly is fine where a utility does not fit: `style={{ backgroundImage: "var(--gradient-gold)" }}`.
+
+### Stacking gradients on one element
+
+`text-gradient-*` works by painting a gradient into the element's **background** and clipping it to the glyphs. So a single element cannot carry both a gradient surface and gradient text — the surface would be clipped to the letters instead.
+
+`components/ui/button.tsx` is the reference for combining all three. Each gradient gets its own layer:
+
+| Layer | Mechanism |
+|---|---|
+| border | `border-gradient-gold` — masked `::before` ring |
+| surface | `bg-gradient-donker` — the element's own `background-image` |
+| label | `text-gradient-gold` — on an inner `<span>` |
+
+Keeping the border off the background is what lets a state swap the surface (`active:bg-none active:bg-blue-500`) without destroying the border. Do not "simplify" this by folding the border into a double-background trick — the pressed state breaks.
+
+Icons are not text, so `background-clip` cannot paint them; give them a solid colour (`[&_svg]:text-gold-400`).
+
+Two traps when changing this:
+
+- **Never transition `background-color` on an element whose surface is a gradient image.** The base sets no `background-color`, so a state that removes the image and fades the colour in shows the page through the gap — a white flash on press. Let the swap happen in a single paint; transition only `box-shadow`/`transform`.
+- **`twMerge` treats `bg-gradient-*` as a background-*colour*.** `cn("bg-blue-800 bg-gradient-donker")` collapses to just `bg-gradient-donker`, so you cannot put a fallback colour underneath the gradient this way. Variant-prefixed classes are unaffected, which is why `active:bg-none active:bg-blue-500` survives. (The same rule is what makes `<Button className="bg-red-500" />` correctly override the surface.)
 
 ### Type
 
@@ -170,6 +195,28 @@ Gradients are not a Tailwind namespace, so they are plain custom properties. Ref
 `theme.css` uses `@theme static`, not plain `@theme`. Tailwind tree-shakes theme variables it does not see used, which would leave `var(--color-gold-500)` undefined for anything referencing it outside a utility class — inline styles, hand-written CSS, third-party components. `static` emits the whole ramp to `:root` unconditionally. The cost is a few hundred bytes; keep it.
 
 Utilities themselves are still generated on demand, so unused classes cost nothing.
+
+## Animation (GSAP)
+
+`gsap` + `@gsap/react` are installed. Always use the `useGSAP()` hook, never a bare `useEffect` — it reverts tweens on unmount for you, and it must run client-side only.
+
+```tsx
+gsap.registerPlugin(useGSAP);            // once per module
+useGSAP(() => { ... }, { dependencies: [open], scope: rootRef });
+```
+
+Always pass `scope` so selector strings cannot match elements outside the component. Wrap anything created in a later event handler in `contextSafe`.
+
+`Navbar/use-collapse.ts` is the reference disclosure animation, shared by the mobile menu and its submenus. Four rules it encodes, all learned the hard way:
+
+- **Padding goes on the inner `<ul>`, never the animated wrapper.** Padding on the wrapper stays visible at `height: 0`, so the panel never fully closes.
+- **`autoAlpha`, not `opacity`.** It also sets `visibility: hidden`, which takes collapsed links out of the tab order.
+- **`fromTo`, not `from`.** An interrupted open leaves a row at opacity 0; `from` would then animate 0 → 0 and the row never appears.
+- **Kill the stagger on close** (`gsap.killTweensOf(rows)`). `overwrite` only covers the tween's own target, so row tweens survive a close that targets the wrapper.
+
+A first-run ref sets the closed state with `gsap.set` instead of animating, and the collapsed classes (`invisible h-0`) are on the element so SSR markup renders closed — otherwise the menu flashes open before hydration.
+
+Multiply every duration by `motionScale()` from `Navbar/motion.ts`, which returns `0` under `prefers-reduced-motion`. That lands on the same end state instantly rather than skipping the state change.
 
 ## Next.js 16 specifics
 
@@ -191,3 +238,15 @@ pnpm build      # full production build
 ```
 
 Run both before declaring work done.
+
+### Verifying visual changes
+
+**Do not render screenshots to check your work.** Launching a browser and reading images back burns a large amount of context for what is almost always a yes/no question. Verify from the compiled output instead — it is exact, and costs a few lines:
+
+```bash
+CSS=$(find .next/static -name "*.css" | head -1)
+grep -o "\.rounded-full{[^}]*}" "$CSS"
+grep -o "\.active\\\\:bg-blue-500:active{[^}]*}" "$CSS"
+```
+
+That confirms a class was generated and what it resolves to. For class-merging questions, run `twMerge` directly in `node -e`. Reach for a screenshot only when the user reports a visual bug that the CSS alone cannot explain, and say why you need one.

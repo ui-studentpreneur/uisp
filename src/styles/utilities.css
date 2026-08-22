@@ -20,3 +20,50 @@
   background-clip: text;
   color: transparent;
 }
+
+/**
+ * Gradient border ring.
+ *
+ * CSS has no gradient `border-color`, so this is not a border at all: it is a
+ * pseudo-element filled with the gradient, then masked so only the outer band
+ * survives. Two masks are layered — one clipped to `content-box`, one to
+ * `border-box` — and `mask-composite: exclude` subtracts the inner one,
+ * leaving a ring exactly `padding` thick.
+ *
+ * The other two options were rejected:
+ *   `border-image`      — ignores `border-radius`, so it cannot do a pill.
+ *   double-background   — needs the surface gradient in the same background
+ *                         stack, which breaks `active:` swapping the fill.
+ *
+ * Inherits `border-radius`, so it follows `rounded-full` automatically.
+ * Thickness is `--border-gradient-width` (default 2px).
+ *
+ * The caller must establish the containing block itself (`relative`, `absolute`,
+ * `fixed`, …). This utility deliberately does not set `position`: doing so
+ * silently overrode `absolute` on any element that needed it, and which
+ * declaration won depended on Tailwind's emit order.
+ */
+@utility border-gradient-gold {
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    /* The ring band IS this padding, so zeroing a side removes that edge —
+       e.g. `--border-gradient-width-top: 0px` for a panel that butts against
+       the navbar. Done with a variable rather than a `before:pt-0` override so
+       it cannot lose a specificity tie to Tailwind's emit order. */
+    padding: var(--border-gradient-width-top, var(--border-gradient-width, 2px))
+      var(--border-gradient-width, 2px) var(--border-gradient-width, 2px);
+    background-image: var(--gradient-gold);
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+}
