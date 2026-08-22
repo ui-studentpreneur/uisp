@@ -9,11 +9,12 @@ import { NavbarBrand } from "./navbar-brand";
  * Fixed site navigation. Server-rendered apart from `MobileNav`, which owns the
  * hamburger state; the desktop dropdowns are pure CSS.
  *
- * Height is `h-20` — layouts must offset their content by the same amount.
+ * Height comes from `--navbar-height`, shared with the layout offset and
+ * the hero's viewport calc.
  */
 const Navbar = () => {
   return (
-    <header className="fixed inset-x-0 top-0 z-50 h-20 bg-gradient-donker">
+    <header className="fixed inset-x-0 top-0 z-50 h-[var(--navbar-height)] bg-gradient-donker">
       {/*
         Decorative artwork. `background-size: auto 100%` scales it to the full
         navbar height at every breakpoint — `bg-contain` fitted it to the *width*

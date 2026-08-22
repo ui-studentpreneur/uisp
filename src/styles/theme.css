@@ -39,6 +39,10 @@
  * `style={{ backgroundImage: "var(--gradient-gold)" }}`.
  */
 :root {
+  /* Navbar height. The fixed navbar, the layout offset that clears it and the
+     hero's viewport calc all read this — keep it in one place. */
+  --navbar-height: 5rem;
+
   --gradient-gold: linear-gradient(
     186deg,
     #f5b899 27.06%,

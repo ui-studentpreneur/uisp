@@ -66,7 +66,7 @@ function Button({
       */}
       <span
         className={cn(
-          "relative inline-flex items-center justify-center gap-2",
+          "cursor-pointer relative inline-flex items-center justify-center gap-2",
           "text-gradient-gold",
           "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:text-gold-400",
           "[&_svg:not([class*='size-'])]:size-4",
