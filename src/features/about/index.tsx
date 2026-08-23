@@ -6,11 +6,15 @@
  * should stay on the page measure wraps itself in `Container`.
  */
 import AboutHero from "./components/hero.about";
+import CompanyVideo from "./components/company.about";
+import OurTheme from "./components/theme.about";
 
 export async function AboutPage() {
   return (
-    <main className="relative min-h-screen bg-gradient-donker">
+    <main className="w-full overflow-hidden relative min-h-screen bg-gradient-donker">
       <AboutHero />
+      <CompanyVideo />
+      <OurTheme />
     </main>
   );
 }

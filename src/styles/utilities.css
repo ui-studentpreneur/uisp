@@ -105,3 +105,39 @@
   animation: marquee var(--marquee-duration, 40s) linear infinite;
   will-change: transform;
 }
+
+/**
+ * Marquee for a repeating background image.
+ *
+ * The DOM-duplication `Marquee` above cannot do this job: it needs a track of
+ * real children, and a decorative backdrop has none. Here the repeat comes
+ * from `background-repeat`, so the whole loop is one element.
+ *
+ * Seamlessness is structural. The pattern repeats every `--marquee-tile`, so
+ * translating by exactly one tile lands on a pixel-identical frame — there is
+ * nothing to measure and no seam to hide. The element is one tile wider than
+ * its container (`w-[calc(100%+var(--marquee-tile))]`) so the far edge never
+ * scrolls into view.
+ *
+ * Transform, not `background-position`: the latter repaints the whole layer on
+ * every frame, and this layer is a full-bleed photograph.
+ *
+ * The tile is sized `var(--marquee-tile) auto`, so the source keeps its own
+ * aspect ratio and `--marquee-tile` reads as a zoom level: set it larger than
+ * the container is tall and the image is cropped rather than stretched. It
+ * must never be *smaller* than the container height — `repeat-x` tiles
+ * sideways only, so a short tile leaves bare strips above and below.
+ */
+@keyframes marquee-bg {
+  to {
+    transform: translate3d(calc(-1 * var(--marquee-tile, 30rem)), 0, 0);
+  }
+}
+
+@utility animate-marquee-bg {
+  animation: marquee-bg var(--marquee-duration, 40s) linear infinite;
+  background-repeat: repeat-x;
+  background-position: center;
+  background-size: var(--marquee-tile, 30rem) auto;
+  will-change: transform;
+}
