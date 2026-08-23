@@ -5,6 +5,12 @@ export {
   type ContactCard,
   type SocialLink,
 } from "./footer";
-export { footerNav, mainNav, type NavItem } from "./navigation";
+export {
+  footerNav,
+  mainNav,
+  type NavGroup,
+  type NavItem,
+  type NavLeaf,
+} from "./navigation";
 export { routes, type AppRoute } from "./routes";
 export { siteConfig, type SiteConfig } from "./site";

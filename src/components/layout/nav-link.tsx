@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import type { NavItem } from "@/config";
+import type { NavLeaf } from "@/config";
 import { cn } from "@/lib/utils";
 
 export function NavLink({
@@ -8,7 +8,7 @@ export function NavLink({
   className,
   onClick,
 }: {
-  item: NavItem;
+  item: NavLeaf;
   className?: string;
   /** Passed by client callers only — e.g. to close the mobile menu on tap. */
   onClick?: () => void;

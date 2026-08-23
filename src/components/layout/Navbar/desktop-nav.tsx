@@ -8,7 +8,7 @@ export function DesktopNav({ items }: { items: readonly NavItem[] }) {
   return (
     <ul className="hidden items-center gap-1 lg:flex">
       {items.map((item) =>
-        item.children?.length ? (
+        "children" in item ? (
           <NavDropdown key={item.label} item={item} />
         ) : (
           <li key={item.label}>

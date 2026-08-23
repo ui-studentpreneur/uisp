@@ -29,7 +29,7 @@ export function MobileNavItem({
   const root = useRef<HTMLDivElement>(null);
   const panel = useCollapse<HTMLDivElement>(expanded, root);
 
-  if (!item.children?.length) {
+  if (!("children" in item)) {
     return <NavLink item={item} className={LEAF} onClick={onNavigate} />;
   }
 

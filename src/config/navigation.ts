@@ -1,13 +1,24 @@
 import { routes } from "./routes";
 
-export type NavItem = {
+/** A nav entry that points at a page. */
+export type NavLeaf = {
   label: string;
   href: string;
   /** External links open in a new tab and get `rel="noreferrer"`. */
   external?: boolean;
-  /** Renders as a hover dropdown on desktop and a disclosure on mobile. */
-  children?: readonly NavItem[];
 };
+
+/**
+ * A label that only opens a submenu. It has no page of its own, so it carries
+ * no `href` — narrow a `NavItem` with `"children" in item` to reach it.
+ */
+export type NavGroup = {
+  label: string;
+  /** Renders as a hover dropdown on desktop and a disclosure on mobile. */
+  children: readonly NavLeaf[];
+};
+
+export type NavItem = NavLeaf | NavGroup;
 
 export const mainNav: readonly NavItem[] = [
   { label: "Home", href: routes.home },
@@ -15,7 +26,6 @@ export const mainNav: readonly NavItem[] = [
   { label: "Competition", href: routes.competition },
   {
     label: "Events",
-    href: routes.events.index,
     children: [
       { label: "Seminar", href: routes.events.seminar },
       {
@@ -26,7 +36,7 @@ export const mainNav: readonly NavItem[] = [
   },
 ] as const;
 
-export const footerNav: readonly NavItem[] = [
+export const footerNav: readonly NavLeaf[] = [
   {
     label: "Documentation",
     href: "https://nextjs.org/docs",

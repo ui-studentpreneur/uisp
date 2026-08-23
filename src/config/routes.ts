@@ -9,7 +9,6 @@ export const routes = {
   aboutUs: "/about-us",
   competition: "/competition",
   events: {
-    index: "/events",
     seminar: "/events/seminar",
     youthEntrepreneurSummit: "/events/youth-entrepreneur-summit",
   },
@@ -23,7 +22,6 @@ export type AppRoute =
   | "/"
   | "/about-us"
   | "/competition"
-  | "/events"
   | "/events/seminar"
   | "/events/youth-entrepreneur-summit"
   | "/api/health";
