@@ -13,11 +13,31 @@ import { EnvReader } from "@/lib/validation";
 
 const nodeEnv = process.env.NODE_ENV ?? "development";
 
+/**
+ * Absolute origin for metadata and canonical URLs.
+ *
+ * `??` is not enough here. A variable that exists but was left blank arrives as
+ * `""`, which is not nullish — so the fallback would be skipped and
+ * `new URL("")` in the root layout throws `ERR_INVALID_URL`, failing the build
+ * during page-data collection. Hosting dashboards produce exactly that when a
+ * project setting is added without a value, so these are truthiness checks
+ * rather than `??`.
+ *
+ * `NEXT_PUBLIC_VERCEL_URL` is the deployment's own hostname, so a preview build
+ * without the variable set still gets real absolute URLs instead of localhost.
+ */
+function siteUrl(): string {
+  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
+  if (process.env.NEXT_PUBLIC_VERCEL_URL)
+    return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`;
+  return "http://localhost:3000";
+}
+
 export const clientEnv = {
   nodeEnv,
   isProduction: nodeEnv === "production",
   isDevelopment: nodeEnv === "development",
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  siteUrl: siteUrl(),
 } as const;
 
 export type ClientEnv = typeof clientEnv;
