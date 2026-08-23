@@ -1,10 +1,16 @@
-import { Container } from "@/components/ui";
-import { Button } from "@/components/ui";
+import Image from "next/image";
 
-const data = [
+import { Button, Container } from "@/components/ui";
+
+import type { SpeakerGroup } from "../types";
+
+import { SpeakerCarousel } from "./speaker-carousel";
+
+// TODO: move to `home/server/queries.ts` when this comes from a CMS.
+const GROUPS: readonly SpeakerGroup[] = [
   {
     title: "Speakers",
-    item: [
+    people: [
       {
         name: "Alfyn Wendi P.",
         role: "Co-Founder of",
@@ -13,7 +19,7 @@ const data = [
       },
       {
         name: "Harwindra Yoga P.",
-        role: "E-Commerce Manager of ",
+        role: "E-Commerce Manager of",
         image: "/speaker2.png",
         company: "PT Campina Ice Cream Industry Tbk",
       },
@@ -39,7 +45,7 @@ const data = [
   },
   {
     title: "Assessors",
-    item: [
+    people: [
       {
         name: "Anindita Nur Annisa",
         role: "Investment Analyst of",
@@ -65,47 +71,44 @@ const data = [
 const SpeakerSection = () => {
   return (
     <section id="speaker" className="relative isolate flex items-center">
-      <div className="flex w-full flex-col items-center gap-20 max-md:gap-10 py-24 text-center">
-        <h2 className="text-gradient-gold text-3xl font-bold tracking-tight px-4 sm:text-4xl">
+      <Image
+        src="/bg-speaker.svg"
+        alt=""
+        aria-hidden
+        width={0}
+        height={0}
+        sizes="100vw"
+        className="pointer-events-none absolute top-[10%] z-0 h-auto w-full max-md:top-[30%]"
+      />
+
+      <div className="relative z-10 flex w-full flex-col items-center gap-20 py-24 text-center max-md:gap-10">
+        <h2 className="text-gradient-gold px-4 text-3xl font-bold tracking-tight sm:text-4xl">
           Our Previous Speakers and Assessors
         </h2>
 
-        <Container className="flex flex-col justify-center items-center gap-20">
-          {data.map((item, index) => (
+        {/*
+          No `Container` around the carousel: the peeking cards need the full
+          viewport width to work out their own gutters.
+        */}
+        <div className="flex w-full flex-col items-center gap-40 max-md:gap-20">
+          {GROUPS.map((group) => (
             <div
-              key={index}
-              className="flex flex-col justify-center items-center gap-12"
+              key={group.title}
+              className="flex w-full flex-col items-center gap-20 max-md:gap-10"
             >
-              <Button size={"lg"} className="w-fit" key={index}>
-                {item.title}
-              </Button>
-              <div className="flex flex-wrap justify-center gap-20">
-                {item.item.map((speaker, idx) => (
-                  <div
-                    key={idx}
-                    className="w-70 flex flex-col items-center gap-4"
-                  >
-                    <h3 className="text-lg text-gradient-gold font-bold">
-                      {speaker.name}
-                    </h3>
-                    <img
-                      src={speaker.image}
-                      alt={speaker.name}
-                      className="w-50 h-50 object-cover mr-4"
-                    />
+              <Container className="flex justify-center">
+                <Button size="lg" className="w-fit">
+                  {group.title}
+                </Button>
+              </Container>
 
-                    <div className="text-gradient-gold">
-                      <p className="font-semibold text-md">{speaker.role}</p>
-                      <p className="font-bold text-lg text-shadow-2xs">{speaker.company}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <SpeakerCarousel people={group.people} />
             </div>
           ))}
-        </Container>
+        </div>
       </div>
     </section>
   );
 };
+
 export default SpeakerSection;

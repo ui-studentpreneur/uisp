@@ -16,3 +16,14 @@ export type MilestoneItem = {
   image: string;
   title: string;
 }
+export type Speaker = {
+  name: string;
+  role: string;
+  company: string;
+  image: string;
+};
+
+export type SpeakerGroup = {
+  title: string;
+  people: readonly Speaker[];
+};

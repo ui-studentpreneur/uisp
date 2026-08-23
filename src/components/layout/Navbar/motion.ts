@@ -1,4 +1,6 @@
-/** Shared motion constants for the navbar. Client-only — reads `window`. */
+/** Navbar timings. The reduced-motion helper lives in `lib/utils`. */
+
+export { motionScale } from "@/lib/utils";
 
 export const DURATION = {
   open: 0.4,
@@ -7,12 +9,3 @@ export const DURATION = {
 } as const;
 
 export const STAGGER = 0.05;
-
-/**
- * Respect the OS "reduce motion" setting. Callers multiply their durations by
- * the result, so a reduced-motion user still lands on the same end state —
- * instantly, rather than not at all.
- */
-export function motionScale(): number {
-  return window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 1;
-}
