@@ -25,3 +25,13 @@ export type AppRoute =
   | "/events/seminar"
   | "/events/youth-entrepreneur-summit"
   | "/api/health";
+
+/**
+ * Fragment ids shared between a link and the element it targets.
+ *
+ * Not routes: they append to whichever page the reader is already on, so the
+ * target element must exist on every page — the footer lives in the layout.
+ */
+export const anchors = {
+  contact: "contact",
+} as const;

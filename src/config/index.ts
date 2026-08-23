@@ -12,5 +12,6 @@ export {
   type NavItem,
   type NavLeaf,
 } from "./navigation";
-export { routes, type AppRoute } from "./routes";
+export { registrationUrls } from "./registration";
+export { anchors, routes, type AppRoute } from "./routes";
 export { siteConfig, type SiteConfig } from "./site";

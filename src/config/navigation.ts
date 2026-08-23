@@ -1,4 +1,4 @@
-import { routes } from "./routes";
+import { anchors, routes } from "./routes";
 
 /** A nav entry that points at a page. */
 export type NavLeaf = {
@@ -34,6 +34,9 @@ export const mainNav: readonly NavItem[] = [
       },
     ],
   },
+  /* Same-page fragment: the footer it targets is rendered by the layout, so
+     this resolves from every page. */
+  { label: "Contact Us", href: `#${anchors.contact}` },
 ] as const;
 
 export const footerNav: readonly NavLeaf[] = [

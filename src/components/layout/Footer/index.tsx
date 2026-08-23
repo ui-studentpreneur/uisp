@@ -1,13 +1,19 @@
 import Image from "next/image";
 
 import { Container } from "@/components/ui";
+import { anchors } from "@/config";
 
 import { ContactList } from "./contact-list";
 import { FooterBrand } from "./footer-brand";
 
 export function SiteFooter() {
   return (
-    <footer className="relative isolate overflow-hidden bg-gradient-donker">
+    /* `scroll-mt` keeps the fixed navbar off the footer when the "Contact Us"
+       fragment link jumps here. */
+    <footer
+      id={anchors.contact}
+      className="relative isolate scroll-mt-[var(--navbar-height)] overflow-hidden bg-gradient-donker"
+    >
       {/*
         Decorative skyline. Its own alpha fades toward the top, so it melts into
         the gradient without needing a mask.

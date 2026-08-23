@@ -131,6 +131,13 @@
     @apply bg-background text-foreground;
   }
   html {
-    @apply font-sans;
+    /* `scroll-smooth` is for fragment links such as the navbar's "Contact Us";
+       `scroll-mt` on the target keeps the fixed navbar from covering it. */
+    @apply font-sans scroll-smooth;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
   }
 }

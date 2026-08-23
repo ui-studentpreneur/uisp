@@ -1,7 +1,5 @@
 import { Button, Container } from "@/components/ui";
-
-/** Placeholder — same one the hero CTA uses. Swap for the real form URL. */
-const REGISTRATION_URL = "/";
+import { registrationUrls } from "@/config";
 
 const CtaSummit = () => {
   return (
@@ -15,7 +13,7 @@ const CtaSummit = () => {
           generation of businesses.
         </p>
 
-        <a href={REGISTRATION_URL} target="_blank" rel="noopener noreferrer">
+        <a href={registrationUrls.youthEntrepreneurSummit} target="_blank" rel="noopener noreferrer">
           <Button size="lg">Register Now!</Button>
         </a>
       </Container>
