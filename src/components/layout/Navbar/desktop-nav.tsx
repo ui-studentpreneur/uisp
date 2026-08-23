@@ -14,10 +14,10 @@ export function DesktopNav({ items }: { items: readonly NavItem[] }) {
           <li key={item.label}>
             <NavLink
               item={item}
-              className="block rounded-full px-4 py-2 text-sm font-medium text-gold-100 hover:text-gold-300"
+              className="block rounded-full px-4 py-2 text-sm font-bold text-gold-100 hover:text-gold-300"
             />
           </li>
-        )
+        ),
       )}
     </ul>
   );

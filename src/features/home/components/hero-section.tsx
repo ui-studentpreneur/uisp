@@ -18,11 +18,23 @@ import { siteConfig } from "@/config";
  * `background-clip: text`, and in-flow content paints after negative-z
  * children, so the photo cannot cover it.
  */
-export function HeroSection() {
+export function HeroSection({
+  image,
+  heading,
+  description,
+  ctaText,
+  ctaLink,
+}: {
+  image: string;
+  heading: string;
+  description: string;
+  ctaText: string;
+  ctaLink: string;
+}) {
   return (
     <section className="relative isolate flex min-h-[calc(100dvh-var(--navbar-height))] overflow-hidden">
       <Image
-        src="/hero.png"
+        src={image}
         alt=""
         aria-hidden
         fill
@@ -35,14 +47,14 @@ export function HeroSection() {
 
       <Container className="flex flex-col items-center justify-center gap-6 py-20 text-center">
         <h1 className="text-gradient-gold text-4xl font-semibold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
-          “The Biggest and Most Awaited National Entrepreneurship Event”
+          {heading}
         </h1>
 
-        <p className=" text-lg leading-8 text-gold-300">
-          {siteConfig.description}
-        </p>
+        <p className=" text-lg leading-8 text-gold-300">{description}</p>
 
-        <Button size="lg">Register Now</Button>
+        <a href={ctaLink} target="_blank" rel="noopener noreferrer">
+          <Button size="lg">{ctaText}</Button>
+        </a>
       </Container>
     </section>
   );

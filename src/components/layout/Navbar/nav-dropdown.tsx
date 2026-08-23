@@ -18,7 +18,7 @@ export function NavDropdown({ item }: { item: NavItem }) {
     <li className="group relative">
       <Link
         href={item.href}
-        className="flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium text-gold-100 transition-colors hover:text-gold-300"
+        className="flex items-center gap-1 rounded-full px-4 py-2 text-sm font-bold text-gold-100 transition-colors hover:text-gold-300"
       >
         {item.label}
         <ChevronDown
@@ -34,7 +34,7 @@ export function NavDropdown({ item }: { item: NavItem }) {
             <li key={child.label}>
               <NavLink
                 item={child}
-                className="block rounded-xl px-3 py-2 text-sm text-gold-100 hover:bg-white/5 hover:text-gold-300"
+                className="block rounded-xl font-semibold px-3 py-2 text-sm text-gold-100 hover:bg-white/5 hover:text-gold-300"
               />
             </li>
           ))}

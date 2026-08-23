@@ -9,27 +9,21 @@ export type NavItem = {
   children?: readonly NavItem[];
 };
 
-// TODO: point these at real routes as the pages land — placeholders resolve home.
 export const mainNav: readonly NavItem[] = [
   { label: "Home", href: routes.home },
+  { label: "About Us", href: routes.aboutUs },
+  { label: "Competition", href: routes.competition },
   {
-    label: "Solutions",
-    href: routes.home,
+    label: "Events",
+    href: routes.events.index,
     children: [
-      { label: "Overview", href: routes.home },
-      { label: "Integrations", href: routes.home },
-      { label: "Pricing", href: routes.home },
+      { label: "Seminar", href: routes.events.seminar },
+      {
+        label: "Youth Entrepreneur Summit",
+        href: routes.events.youthEntrepreneurSummit,
+      },
     ],
   },
-  {
-    label: "Resources",
-    href: routes.home,
-    children: [
-      { label: "Documentation", href: routes.home },
-      { label: "Support", href: routes.home },
-    ],
-  },
-  { label: "Contact", href: routes.home },
 ] as const;
 
 export const footerNav: readonly NavItem[] = [

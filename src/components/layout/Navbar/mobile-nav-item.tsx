@@ -11,7 +11,7 @@ import { NavLink } from "../nav-link";
 import { useCollapse } from "./use-collapse";
 
 export const LEAF =
-  "block rounded-xl px-3 py-2.5 text-sm font-medium text-gold-100 transition-colors hover:bg-white/5 hover:text-gold-300";
+  "block rounded-xl px-3 py-2.5 text-sm font-bold text-gold-100 transition-colors hover:bg-white/5 hover:text-gold-300";
 
 /**
  * One row of the mobile menu. Items with children render a GSAP-animated

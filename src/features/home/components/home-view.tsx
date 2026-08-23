@@ -14,7 +14,13 @@ import SponsorSection from "./sponsor";
 export async function HomeView() {
   return (
     <main className="bg-gradient-donker">
-      <HeroSection />
+      <HeroSection
+        image="/hero.png"
+        heading="The Biggest and Most Awaited National Entrepreneurship Event"
+        description="The 16th UI Studentpreneurs  is The Biggest and Most Awaited National Entrepreneurship event held under Badan Eksekutif Mahasiswa Fakultas Ekonomi dan Bisnis Universitas Indonesia”"
+        ctaText="Register Now"
+        ctaLink="/register"
+      />
       <TimelineSection />
       <MilestoneSection />
       <SpeakerSection />
