@@ -11,7 +11,7 @@ import OurTheme from "./components/theme.about";
 
 export async function AboutPage() {
   return (
-    <main className="w-full overflow-hidden relative min-h-screen bg-gradient-donker">
+    <main className="w-full overflow-hidden relative min-h-screen bg-blue-700">
       <AboutHero />
       <CompanyVideo />
       <OurTheme />

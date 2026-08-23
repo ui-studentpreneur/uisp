@@ -1,11 +1,11 @@
 import Image from "next/image";
 
+import {
+  TimelineCard,
+  TimelineTrack,
+  type TimelineItem,
+} from "@/components/timeline";
 import { Container } from "@/components/ui";
-
-import type { TimelineItem } from "../types";
-
-import { TimelineCard } from "./timeline-card";
-import { TimelineTrack } from "./timeline-track";
 
 // TODO: real dates and titles. When this needs to come from a CMS or the DB,
 // move it to `home/server/queries.ts` alongside `getHighlights()`.
@@ -24,8 +24,9 @@ const TIMELINE: readonly TimelineItem[] = [
  * The artwork is gold linework on transparency, so whatever sits behind this
  * section has to be dark for it to read.
  *
- * Lives under `home/` because it is a section of the home page. If the timeline
- * grows its own data and server queries, promote it to `src/features/timeline/`.
+ * Lives under `home/` because only the copy, data and artwork are the home
+ * page's. The card and connector are shared with `competition/`, so they sit in
+ * `@/components/timeline`.
  */
 export function TimelineSection() {
   return (

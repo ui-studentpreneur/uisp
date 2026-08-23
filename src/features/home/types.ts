@@ -7,23 +7,7 @@ export type Highlight = {
   href: string;
 };
 
-export type TimelineItem = {
-  date: string;
-  title: string;
-};
-
 export type MilestoneItem = {
   image: string;
   title: string;
 }
-export type Speaker = {
-  name: string;
-  role: string;
-  company: string;
-  image: string;
-};
-
-export type SpeakerGroup = {
-  title: string;
-  people: readonly Speaker[];
-};

@@ -26,7 +26,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang={siteConfig.locale}
-      className={cn("h-full antialiased", raleway.variable, geistMono.variable)}
+      className={cn("h-full", raleway.variable, geistMono.variable)}
     >
       <body className="flex min-h-full flex-col font-sans">
         <AppProviders>{children}</AppProviders>

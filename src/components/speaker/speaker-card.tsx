@@ -1,6 +1,16 @@
 import Image from "next/image";
 
-import type { Speaker } from "../types";
+/**
+ * One person on a speaker list. Declared here rather than in `src/types/`
+ * because it is this component's props contract, not a domain type any
+ * feature owns.
+ */
+export type Speaker = {
+  name: string;
+  role: string;
+  company: string;
+  image: string;
+};
 
 export function SpeakerCard({ speaker }: { speaker: Speaker }) {
   return (

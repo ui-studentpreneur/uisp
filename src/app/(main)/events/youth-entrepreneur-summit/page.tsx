@@ -1,16 +1,7 @@
-import { PagePlaceholder } from "@/components/ui";
+import SummitPage from "@/features/summit";
 
 export const metadata = { title: "Youth Entrepreneur Summit" };
 
-export default function YouthEntrepreneurSummitPage() {
-  return (
-    <PagePlaceholder
-      title="Youth Entrepreneur Summit"
-      todo={[
-        "Date, venue and agenda",
-        "Speaker and mentor line-up",
-        "Registration flow",
-      ]}
-    />
-  );
+export default function YouthEntrepreneurSummitView() {
+  return <SummitPage />;
 }

@@ -2,12 +2,7 @@
 
 import { useEffect, useRef, type ReactNode } from "react";
 
-import {
-  EPSILON,
-  STROKE_WIDTH,
-  buildPath,
-  type Box,
-} from "./timeline-path";
+import { EPSILON, STROKE_WIDTH, buildPath, type Box } from "./timeline-path";
 
 const CARD = "[data-timeline-card]";
 

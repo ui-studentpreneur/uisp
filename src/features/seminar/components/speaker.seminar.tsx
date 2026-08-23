@@ -1,6 +1,7 @@
 import { SpeakerSection, type SpeakerGroup } from "@/components/speaker";
 
-// TODO: move to `home/server/queries.ts` when this comes from a CMS.
+// TODO: placeholder — these are the home page's previous speakers, reused so
+// the section has something to render. Swap for this seminar's line-up.
 const GROUPS: readonly SpeakerGroup[] = [
   {
     title: "Speakers",
@@ -37,37 +38,10 @@ const GROUPS: readonly SpeakerGroup[] = [
       },
     ],
   },
-  {
-    title: "Assessors",
-    people: [
-      {
-        name: "Anindita Nur Annisa",
-        role: "Investment Analyst of",
-        image: "/speaker6.png",
-        company: "MDI Ventures",
-      },
-      {
-        name: "Maksun Djatmiko",
-        role: "Director of",
-        image: "/speaker7.png",
-        company: "Arka Investama Raharja",
-      },
-      {
-        name: "Salsabila Firyal Fitri",
-        role: "Investments of",
-        image: "/speaker8.png",
-        company: "Telkomsel Ventures",
-      },
-    ],
-  },
 ];
 
-/**
- * Home page's speaker list. Only the copy and the people are the home
- * page's — the carousel and layout are shared with `seminar/`.
- */
-const HomeSpeakerSection = () => (
-  <SpeakerSection heading="Our Previous Speakers and Assessors" groups={GROUPS} />
+const SpeakerSeminar = () => (
+  <SpeakerSection heading="Our Speakers" groups={GROUPS} />
 );
 
-export default HomeSpeakerSection;
+export default SpeakerSeminar;

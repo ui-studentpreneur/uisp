@@ -1,16 +1,7 @@
-import { PagePlaceholder } from "@/components/ui";
+import SeminarPage from "@/features/seminar";
 
 export const metadata = { title: "Seminar" };
 
-export default function SeminarPage() {
-  return (
-    <PagePlaceholder
-      title="Seminar"
-      todo={[
-        "Date, venue and agenda",
-        "Speaker line-up (reuse SpeakerCard from the home feature)",
-        "Ticketing / registration link",
-      ]}
-    />
-  );
+export default function SeminarView() {
+  return <SeminarPage />;
 }

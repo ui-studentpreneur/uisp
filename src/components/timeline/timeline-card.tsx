@@ -1,4 +1,11 @@
-import type { TimelineItem } from "../types";
+/**
+ * One row of a timeline. Declared here rather than in `src/types/` because it
+ * is this component's props contract, not a domain type any feature owns.
+ */
+export type TimelineItem = {
+  date: string;
+  title: string;
+};
 
 export function TimelineCard({ item }: { item: TimelineItem }) {
   return (

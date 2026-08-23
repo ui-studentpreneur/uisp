@@ -4,9 +4,7 @@ import { useEffect, useRef, type CSSProperties } from "react";
 
 import { cn, prefersReducedMotion } from "@/lib/utils";
 
-import type { Speaker } from "../types";
-
-import { SpeakerCard } from "./speaker-card";
+import { SpeakerCard, type Speaker } from "./speaker-card";
 
 /** Fraction of each neighbouring card left visible beside the active one. */
 const PEEK = 0.2;

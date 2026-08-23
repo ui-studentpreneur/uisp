@@ -1,7 +1,6 @@
 import Image from "next/image";
 
 import { Button, Container } from "@/components/ui";
-import { siteConfig } from "@/config";
 
 /**
  * Full-bleed hero, one viewport tall.
