@@ -1,65 +1,17 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { Children, useRef, type ReactNode } from "react";
 
-import { EPSILON, STROKE_WIDTH, buildPath, type Box } from "./timeline-path";
+import { applySerpentine, toBox, toRows } from "./timeline-layout";
+import { STROKE_WIDTH, buildSegments } from "./timeline-path";
+import { buildReveal, killReveal } from "./timeline-reveal";
 
 const CARD = "[data-timeline-card]";
 
-function toBox(card: HTMLElement, base: DOMRect): Box {
-  const r = card.getBoundingClientRect();
-  const left = r.left - base.left;
-  const top = r.top - base.top;
-  return {
-    left,
-    right: r.right - base.left,
-    top,
-    bottom: r.bottom - base.top,
-    midX: left + r.width / 2,
-    midY: top + r.height / 2,
-  };
-}
-
-/** Groups cards into visual rows by their vertical position. */
-function toRows(cards: HTMLElement[]): HTMLElement[][] {
-  const rows: HTMLElement[][] = [];
-  let rowTop: number | null = null;
-
-  for (const card of cards) {
-    const { top } = card.getBoundingClientRect();
-    if (rowTop === null || Math.abs(top - rowTop) > EPSILON) {
-      rows.push([card]);
-      rowTop = top;
-    } else {
-      rows[rows.length - 1].push(card);
-    }
-  }
-
-  return rows;
-}
-
 /**
- * Reverses every second row via flex `order`, so the rows read left-to-right,
- * then right-to-left, and so on.
- *
- * Reordering is safe to do after measuring because the cards are all the same
- * width: reversing a row cannot change which cards fit in it, so the rows do
- * not need regrouping afterwards.
- */
-function applySerpentine(rows: HTMLElement[][]): void {
-  let position = 0;
-
-  for (const [index, row] of rows.entries()) {
-    const ordered = index % 2 === 1 ? [...row].reverse() : row;
-    for (const card of ordered) {
-      card.style.order = String(position);
-      position += 1;
-    }
-  }
-}
-
-/**
- * Draws the gold connector between timeline cards.
+ * Draws the gold connector between timeline cards and reveals both on scroll.
  *
  * Measured from real laid-out positions rather than assumed from a column
  * count: the cards use `flex-wrap`, so how many fit per row depends on the
@@ -70,48 +22,76 @@ function applySerpentine(rows: HTMLElement[][]): void {
  * builds the path. Both are needed because the serpentine order is derived
  * from the layout it then changes.
  *
- * Written straight to the DOM rather than through state — this reruns on every
- * resize, and re-rendering for a string only the SVG reads would be waste.
+ * The path is written straight to the DOM rather than through state — this
+ * reruns on every resize, and re-rendering for a string only the SVG reads
+ * would be waste.
+ *
+ * The hidden starting state is set here rather than in the markup, so the cards
+ * are readable if this never runs. They sit below the fold on both pages that
+ * use them, so hydration lands long before they are on screen.
  */
 export function TimelineTrack({ children }: { children: ReactNode }) {
   const container = useRef<HTMLDivElement>(null);
-  const path = useRef<SVGPathElement>(null);
+  const segments = useRef<(SVGPathElement | null)[]>([]);
   const gradient = useRef<SVGLinearGradientElement>(null);
 
-  useEffect(() => {
-    const el = container.current;
-    if (!el) return;
+  // One connector per gap between cards, so each leg can draw itself in turn.
+  const segmentCount = Math.max(0, Children.count(children) - 1);
 
-    const draw = () => {
-      const cards = Array.from(el.querySelectorAll<HTMLElement>(CARD));
+  useGSAP(
+    (_context, contextSafe) => {
+      const el = container.current;
+      if (!el) return;
 
-      // Pass 1 — natural wrap. Stale orders would corrupt the row grouping.
-      for (const card of cards) card.style.order = "";
-      applySerpentine(toRows(cards));
+      let reveal: gsap.core.Timeline | null = null;
 
-      // Pass 2 — reordered layout, in chronological (DOM) order.
-      const base = el.getBoundingClientRect();
-      path.current?.setAttribute(
-        "d",
-        buildPath(
+      // `contextSafe` because `draw` also runs from the observer, long after
+      // this callback has returned: without it the rebuilt tweens would escape
+      // the context and outlive the component.
+      const draw = contextSafe!(() => {
+        const cards = Array.from(el.querySelectorAll<HTMLElement>(CARD));
+
+        // The reveal moves cards with transforms and `getBoundingClientRect`
+        // reports those, so measuring mid-flight would bend the connector
+        // around wherever a card happened to be passing. Drop the old tweens
+        // and the inline styles they left before reading anything.
+        killReveal(reveal);
+        gsap.set(cards, { clearProps: "transform,opacity,visibility" });
+
+        // Pass 1 — natural wrap. Stale orders would corrupt the row grouping.
+        for (const card of cards) card.style.order = "";
+        applySerpentine(toRows(cards));
+
+        // Pass 2 — reordered layout, in chronological (DOM) order.
+        const base = el.getBoundingClientRect();
+        const legs = buildSegments(
           cards.map((card) => toBox(card, base)),
-          base.width
-        )
-      );
-      // Vertical sweep over the whole track, matching the brand gradient.
-      gradient.current?.setAttribute("y2", String(base.height));
-    };
+          base.width,
+        );
+        const paths = segments.current
+          .slice(0, segmentCount)
+          .filter((path) => path !== null);
+        paths.forEach((path, i) => path.setAttribute("d", legs[i] ?? ""));
 
-    draw();
+        // Vertical sweep over the whole track, matching the brand gradient.
+        gradient.current?.setAttribute("y2", String(base.height));
 
-    // Only fires on size changes, so reordering (which moves cards without
-    // resizing them or the container) cannot loop back into this.
-    const observer = new ResizeObserver(draw);
-    observer.observe(el);
-    for (const card of el.querySelectorAll(CARD)) observer.observe(card);
+        reveal = buildReveal(el, cards, paths);
+      });
 
-    return () => observer.disconnect();
-  }, [children]);
+      draw();
+
+      // Only fires on size changes, so reordering (which moves cards without
+      // resizing them or the container) cannot loop back into this. Transforms
+      // do not affect the observed box either, so the reveal cannot retrigger it.
+      const observer = new ResizeObserver(draw);
+      observer.observe(el);
+      for (const card of el.querySelectorAll(CARD)) observer.observe(card);
+
+      return () => observer.disconnect();
+    },
+    { dependencies: [children], scope: container },
+  );
 
   return (
     <div ref={container} className="relative">
@@ -136,14 +116,20 @@ export function TimelineTrack({ children }: { children: ReactNode }) {
             <stop offset="0.894" stopColor="#B17763" />
           </linearGradient>
         </defs>
-        <path
-          ref={path}
-          stroke="url(#timeline-connector)"
-          strokeWidth={STROKE_WIDTH}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          fill="none"
-        />
+
+        {Array.from({ length: segmentCount }, (_, i) => (
+          <path
+            key={i}
+            ref={(node) => {
+              segments.current[i] = node;
+            }}
+            stroke="url(#timeline-connector)"
+            strokeWidth={STROKE_WIDTH}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            fill="none"
+          />
+        ))}
       </svg>
 
       <div className="relative flex flex-wrap justify-center gap-x-80 gap-y-24">

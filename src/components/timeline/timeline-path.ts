@@ -118,7 +118,15 @@ function rowSizes(boxes: readonly Box[]): number[] {
   return sizes;
 }
 
-export function buildPath(boxes: readonly Box[], width: number): string {
+/**
+ * One `d` string per gap between cards, in chronological order.
+ *
+ * Returned as separate segments rather than one joined path because the
+ * connector draws itself on scroll: SVG restarts a dash pattern at every
+ * subpath, so a single `stroke-dashoffset` over a multi-`M` path would draw
+ * every leg at once instead of one after another.
+ */
+export function buildSegments(boxes: readonly Box[], width: number): string[] {
   const segments: string[] = [];
   const sizes = rowSizes(boxes);
 
@@ -137,5 +145,5 @@ export function buildPath(boxes: readonly Box[], width: number): string {
     }
   }
 
-  return segments.join(" ");
+  return segments;
 }
