@@ -84,3 +84,24 @@
     pointer-events: none;
   }
 }
+
+/**
+ * Marquee: one continuous horizontal drift.
+ *
+ * The track holds exactly two identical copies, so translating by half its
+ * width lands on content pixel-identical to the start — the loop has no seam.
+ * Duration comes from `--marquee-duration`, set per row.
+ */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@utility animate-marquee {
+  animation: marquee var(--marquee-duration, 40s) linear infinite;
+  will-change: transform;
+}
