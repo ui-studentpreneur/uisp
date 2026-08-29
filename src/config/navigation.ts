@@ -29,7 +29,7 @@ export const mainNav: readonly NavItem[] = [
     children: [
       { label: "Seminar", href: routes.events.seminar },
       {
-        label: "Youth Entrepreneur Summit",
+        label: "Young Entrepreneur Summit",
         href: routes.events.youthEntrepreneurSummit,
       },
     ],

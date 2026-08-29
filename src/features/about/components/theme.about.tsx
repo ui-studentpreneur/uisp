@@ -35,7 +35,7 @@ const OurTheme = () => {
           <h2 className="text-gradient-gold px-4 text-3xl font-bold tracking-tight sm:text-4xl">
             Core Values
           </h2>
-          <div className="flex gap-4 justify-center">
+          <div className="flex gap-4 justify-center flex-wrap ">
             <Button size={"lg"} className="w-fit cursor-none">
               INNOVATION
             </Button>

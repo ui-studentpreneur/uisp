@@ -5,7 +5,7 @@ import {
   TimelineTrack,
   type TimelineItem,
 } from "@/components/timeline";
-import { Container } from "@/components/ui";
+import { Container, Reveal } from "@/components/ui";
 
 // TODO: real dates and titles. When this needs to come from a CMS or the DB,
 // move it to `home/server/queries.ts` alongside `getHighlights()`.
@@ -32,9 +32,13 @@ export function TimelineSection() {
   return (
     <section id="timeline" className="relative isolate flex items-center">
       <div className="flex w-full flex-col items-center gap-6 py-24  text-center max-md:gap-4">
-        <h2 className="text-gradient-gold text-3xl font-bold tracking-tight sm:text-4xl">
-          Our Timeline
-        </h2>
+        {/* Heading only: `TimelineTrack` already scrubs the cards and the
+            connector in, and a second entrance would fight it. */}
+        <Reveal motion="stamp">
+          <h2 className="text-gradient-gold text-3xl font-bold tracking-tight sm:text-4xl">
+            Our Timeline
+          </h2>
+        </Reveal>
 
         <div className="relative w-full py-40 max-md:py-10">
           {/* Sized to the width so the artwork keeps its 1439x1184 aspect. */}

@@ -1,3 +1,5 @@
+import { Reveal } from "@/components/ui";
+
 import { Marquee } from "./marquee";
 
 const sponsorData = [
@@ -164,46 +166,52 @@ const SponsorSection = () => {
               key={sponsor.title}
               className="flex w-full flex-col gap-10 max-md:gap-6"
             >
-              <h2 className="text-gradient-gold px-4 text-3xl font-bold tracking-tight sm:text-4xl">
-                {sponsor.title}
-              </h2>
+              <Reveal motion="stamp">
+                <h2 className="text-gradient-gold px-4 text-3xl font-bold tracking-tight sm:text-4xl">
+                  {sponsor.title}
+                </h2>
+              </Reveal>
 
-              <div className="relative w-full py-1">
-                <div
-                  className="absolute top-0 left-0 h-1 w-full"
-                  style={{ background: EDGE }}
-                />
-                <div
-                  className="absolute bottom-0 left-0 h-1 w-full"
-                  style={{ background: EDGE }}
-                />
+              {/* Each band waits for its own trigger — the two are stacked far
+                  enough apart that one shared one would spend the second. */}
+              <Reveal motion="unfurl">
+                <div className="relative w-full py-1">
+                  <div
+                    className="absolute top-0 left-0 h-1 w-full"
+                    style={{ background: EDGE }}
+                  />
+                  <div
+                    className="absolute bottom-0 left-0 h-1 w-full"
+                    style={{ background: EDGE }}
+                  />
 
-                <div
-                  className="flex w-full flex-col gap-10 py-10"
-                  style={{ background: SHEEN }}
-                >
-                  {rows.map((logos, row) => (
-                    <Marquee
-                      key={row}
-                      seconds={marqueeSeconds(logos.length, row)}
-                      reverse={ROW_REVERSED[row]}
-                    >
-                      {logos.map((logo) => (
-                        <img
-                          key={logo}
-                          src={logo}
-                          alt=""
-                          className={
-                            row === 0
-                              ? "h-20 w-auto object-contain"
-                              : "h-15 w-auto object-contain"
-                          }
-                        />
-                      ))}
-                    </Marquee>
-                  ))}
+                  <div
+                    className="flex w-full flex-col gap-10 py-10"
+                    style={{ background: SHEEN }}
+                  >
+                    {rows.map((logos, row) => (
+                      <Marquee
+                        key={row}
+                        seconds={marqueeSeconds(logos.length, row)}
+                        reverse={ROW_REVERSED[row]}
+                      >
+                        {logos.map((logo) => (
+                          <img
+                            key={logo}
+                            src={logo}
+                            alt=""
+                            className={
+                              row === 0
+                                ? "h-20 w-auto object-contain"
+                                : "h-15 w-auto object-contain"
+                            }
+                          />
+                        ))}
+                      </Marquee>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              </Reveal>
             </div>
           );
         })}

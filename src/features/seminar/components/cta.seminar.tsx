@@ -5,8 +5,8 @@ const CtaSeminar = () => {
   return (
     <section className="relative flex-col gap-10 isolate">
       <div className="absolute bottom-0 translate-y-1/2 left-1/2 z-0 size-100 -translate-x-1/2 rounded-full bg-blue-100 blur-[300px]" />
-      <Container className="flex flex-col gap-4">
-        <p className="text-gradient-gold max-w-3xl text-2xl font-bold max-md:text-lg">
+      <Container className="flex flex-col gap-4 max-md:gap-2">
+        <p className="text-gradient-gold max-w-3xl text-2xl font-bold">
           Benefit
         </p>
         <p className="text-gradient-gold text-xl font-bold max-md:text-lg">

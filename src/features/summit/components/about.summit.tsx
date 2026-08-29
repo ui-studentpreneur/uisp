@@ -12,7 +12,7 @@ const AboutSummit = () => {
         aria-hidden
         width={0}
         height={0}
-        className="absolute top-0 right-0 w-60 max-md:w-40 h-auto object-cover z-0"
+        className="absolute top-0 right-0 w-60 max-md:w-30 h-auto object-cover z-0"
       />
       <div className="size-100 z-0 rounded-full absolute blur-[500px]  left-0 bg-gold-500 -translate-x-1/2"></div>
       <Container className="relative z-10 flex flex-col gap-10 py-20">

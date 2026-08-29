@@ -1,4 +1,5 @@
 import { SpeakerSection, type SpeakerGroup } from "@/components/speaker";
+import { Reveal } from "@/components/ui";
 
 // TODO: move to `home/server/queries.ts` when this comes from a CMS.
 const GROUPS: readonly SpeakerGroup[] = [
@@ -67,10 +68,21 @@ const GROUPS: readonly SpeakerGroup[] = [
  * page's — the carousel and layout are shared with `seminar/`.
  */
 const HomeSpeakerSection = () => (
-  <SpeakerSection
-    heading="Our Previous Speakers and Assessors"
-    groups={GROUPS}
-  />
+  /*
+   * Two passes over the same subtree, because the section is shared and cannot
+   * be split from here: the heading and the two group pills take the page's
+   * usual entrance, and the portraits develop in behind them. Both motions
+   * trigger per element — the groups are a screen apart, so one shared trigger
+   * would spend the second group's entrance offscreen.
+   */
+  <Reveal motion="stamp" select="h2, [data-speaker-label]">
+    <Reveal motion="develop" select="[data-speaker-card]">
+      <SpeakerSection
+        heading="Our Previous Speakers and Assessors"
+        groups={GROUPS}
+      />
+    </Reveal>
+  </Reveal>
 );
 
 export default HomeSpeakerSection;

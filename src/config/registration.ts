@@ -6,6 +6,7 @@
  */
 // TODO: swap the placeholders for the real form URLs.
 export const registrationUrls = {
+  competition: "/",
   seminar: "/",
   youthEntrepreneurSummit: "/",
 } as const;

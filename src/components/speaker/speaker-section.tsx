@@ -67,6 +67,8 @@ export function SpeakerSection({
 const speakerLabel = ({ title }: { title: string }) => {
   return (
     <div
+      // Animation hook for callers that reveal the pills on scroll.
+      data-speaker-label
       className="relative py-3 px-20 max-md:px-16 text-white font-bold text-2xl max-md:text-xl"
       style={{
         background:

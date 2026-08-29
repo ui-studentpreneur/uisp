@@ -9,7 +9,7 @@ const AboutSeminar = () => {
         alt="Seminar Background"
         width={0}
         height={0}
-        className="absolute top-0 right-0 w-100 max-md:w-70 h-auto object-cover z-0"
+        className="absolute top-0 right-0 w-100 max-md:w-50 h-auto object-cover z-0"
       />
       <div className="size-100 z-0 rounded-full absolute blur-[500px]  left-0 bg-gold-500 -translate-x-1/2"></div>
       <Container className="z-10 flex flex-col gap-10 py-20">

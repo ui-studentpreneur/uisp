@@ -14,7 +14,11 @@ export type Speaker = {
 
 export function SpeakerCard({ speaker }: { speaker: Speaker }) {
   return (
-    <div className="flex w-80 flex-col items-center gap-4">
+    <div
+      // Animation hook for callers that reveal the cards on scroll.
+      data-speaker-card
+      className="flex w-80 flex-col items-center gap-4"
+    >
       <h3 className="text-gradient-gold text-lg font-bold">{speaker.name}</h3>
 
       <Image

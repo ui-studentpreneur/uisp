@@ -61,8 +61,14 @@ export function RegisterWidget({
             : "invisible translate-y-4 opacity-0",
         )}
       >
-        <div className="rounded-t-3xl rounded-l-3xl bg-gradient-gold border-2 border-gold-300 p-6 max-md:p-4 flex flex-col items-center justify-center gap-2">
-          <p className="text-white w-[80%] font-bold text-lg max-md:text-sm text-center">
+        <div
+          className="rounded-t-3xl rounded-l-3xl border-2 border-gold-300 p-4 max-md:p-3 flex flex-col items-center justify-center gap-2"
+          style={{
+            background:
+              "linear-gradient(105deg, #F5B899 4.43%, #7E6861 51.59%, #162230 101.18%)",
+          }}
+        >
+          <p className="text-white w-[80%] font-bold text-xl max-md:text-lg text-center">
             Ready to Grow Beyond Limits?
           </p>
           <a
