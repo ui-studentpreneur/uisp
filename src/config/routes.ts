@@ -15,6 +15,9 @@ export const routes = {
   api: {
     health: "/api/health",
   },
+  /** Content admin. Gated by `requireUser()` on every page and action. */
+  admin: "/admin",
+  adminLogin: "/admin/login",
 } as const;
 
 /** Every literal path reachable from `routes`, as a union type. */
@@ -24,7 +27,9 @@ export type AppRoute =
   | "/competition"
   | "/events/seminar"
   | "/events/youth-entrepreneur-summit"
-  | "/api/health";
+  | "/api/health"
+  | "/admin"
+  | "/admin/login";
 
 /**
  * Fragment ids shared between a link and the element it targets.

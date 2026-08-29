@@ -2,130 +2,11 @@ import { Reveal } from "@/components/ui";
 
 import { Marquee } from "./marquee";
 
-const sponsorData = [
-  {
-    title: "Our Sponsor",
-    mainItem: [
-      "/sponsor1.png",
-      "/sponsor2.png",
-      "/sponsor3.png",
-      "/sponsor4.png",
-      "/sponsor5.png",
-      "/sponsor6.png",
-      "/sponsor7.png",
-    ],
-    item: [
-      "/sponsor1.png",
-      "/sponsor2.png",
-      "/sponsor3.png",
-      "/sponsor4.png",
-      "/sponsor5.png",
-      "/sponsor6.png",
-      "/sponsor7.png",
-    ],
-  },
-  {
-    title: "Our Media Partner",
-    mainItem: [
-      "/medpar1.png",
-      "/medpar2.png",
-      "/medpar3.png",
-      "/medpar4.png",
-      "/medpar5.png",
-      "/medpar6.png",
-      "/medpar7.png",
-      "/medpar8.png",
-      "/medpar9.png",
-      "/medpar10.png",
-      "/medpar11.png",
-      "/medpar12.png",
-      "/medpar13.png",
-      "/medpar14.png",
-      "/medpar15.png",
-      "/medpar16.png",
-      "/medpar17.png",
-      "/medpar18.png",
-      "/medpar19.png",
-      "/medpar20.png",
-      "/medpar21.png",
-      "/medpar22.png",
-      "/medpar23.png",
-      "/medpar24.png",
-      "/medpar25.png",
-      "/medpar26.png",
-      "/medpar27.png",
-      "/medpar28.png",
-      "/medpar29.png",
-      "/medpar30.png",
-      "/medpar31.png",
-      "/medpar32.png",
-      "/medpar33.png",
-      "/medpar34.png",
-      "/medpar35.png",
-      "/medpar36.png",
-      "/medpar37.png",
-      "/medpar38.png",
-      "/medpar39.png",
-      "/medpar40.png",
-      "/medpar41.png",
-      "/medpar42.png",
-      "/medpar43.png",
-      "/medpar44.png",
-      "/medpar45.png",
-      "/medpar46.png",
-      "/medpar47.png",
-    ],
-    item: [
-      "/medpar1.png",
-      "/medpar2.png",
-      "/medpar3.png",
-      "/medpar4.png",
-      "/medpar5.png",
-      "/medpar6.png",
-      "/medpar7.png",
-      "/medpar8.png",
-      "/medpar9.png",
-      "/medpar10.png",
-      "/medpar11.png",
-      "/medpar12.png",
-      "/medpar13.png",
-      "/medpar14.png",
-      "/medpar15.png",
-      "/medpar16.png",
-      "/medpar17.png",
-      "/medpar18.png",
-      "/medpar19.png",
-      "/medpar20.png",
-      "/medpar21.png",
-      "/medpar22.png",
-      "/medpar23.png",
-      "/medpar24.png",
-      "/medpar25.png",
-      "/medpar26.png",
-      "/medpar27.png",
-      "/medpar28.png",
-      "/medpar29.png",
-      "/medpar30.png",
-      "/medpar31.png",
-      "/medpar32.png",
-      "/medpar33.png",
-      "/medpar34.png",
-      "/medpar35.png",
-      "/medpar36.png",
-      "/medpar37.png",
-      "/medpar38.png",
-      "/medpar39.png",
-      "/medpar40.png",
-      "/medpar41.png",
-      "/medpar42.png",
-      "/medpar43.png",
-      "/medpar44.png",
-      "/medpar45.png",
-      "/medpar46.png",
-      "/medpar47.png",
-    ],
-  },
-];
+/** One band: a heading and the logos that scroll beneath it. */
+export type SponsorBand = {
+  title: string;
+  items: readonly { id: string; image?: string }[];
+};
 
 /**
  * Seconds of travel per logo. Duration is derived from the row's length, so a
@@ -154,12 +35,15 @@ const EDGE =
 const SHEEN =
   "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.25) 27%, rgba(255,255,255,0.4) 54%, rgba(255,255,255,0.25) 77%, rgba(255,255,255,0) 100%)";
 
-const SponsorSection = () => {
+const SponsorSection = ({ groups }: { groups: readonly SponsorBand[] }) => {
   return (
     <section id="sponsor" className="relative isolate flex items-center">
       <div className="relative z-10 flex w-full flex-col items-center gap-20 py-24 text-center max-md:gap-10">
-        {sponsorData.map((sponsor) => {
-          const rows = [sponsor.mainItem, sponsor.item];
+        {groups.map((sponsor) => {
+          // The same logos twice: two bands drifting at different speeds and
+          // in opposite directions is what gives the section its depth.
+          const logos = sponsor.items.map((item) => item.image ?? "");
+          const rows = [logos, logos];
 
           return (
             <div
@@ -195,9 +79,9 @@ const SponsorSection = () => {
                         seconds={marqueeSeconds(logos.length, row)}
                         reverse={ROW_REVERSED[row]}
                       >
-                        {logos.map((logo) => (
+                        {logos.map((logo, index) => (
                           <img
-                            key={logo}
+                            key={`${logo}-${index}`}
                             src={logo}
                             alt=""
                             className={

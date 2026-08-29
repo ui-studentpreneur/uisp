@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { Button, Container } from "@/components/ui";
+import { Container, Reveal } from "@/components/ui";
 
 import { SpeakerCarousel } from "./speaker-carousel";
 import type { Speaker } from "./speaker-card";
@@ -37,9 +37,11 @@ export function SpeakerSection({
       />
 
       <div className="relative z-10 flex w-full flex-col items-center gap-20 py-24 text-center max-md:gap-10">
-        <h2 className="text-gradient-gold px-4 text-3xl font-bold tracking-tight sm:text-4xl">
-          {heading}
-        </h2>
+        <Reveal motion="stamp">
+          <h2 className="text-gradient-gold px-4 text-3xl font-bold tracking-tight sm:text-4xl">
+            {heading}
+          </h2>
+        </Reveal>
 
         {/*
           No `Container` around the carousel: the peeking cards need the full
@@ -52,10 +54,24 @@ export function SpeakerSection({
               className="flex w-full flex-col items-center gap-20 max-md:gap-10"
             >
               <Container className="flex justify-center">
-                {speakerLabel({ title: group.title })}
+                <Reveal motion="stamp">
+                  {speakerLabel({ title: group.title })}
+                </Reveal>
               </Container>
 
-              <SpeakerCarousel people={group.people} />
+              {/*
+                `w-full min-w-0` repeats the track's own sizing: this wrapper is
+                now the flex item the track used to be, and without a definite
+                width the track is sized by its content instead of scrolling
+                inside the viewport. See the note on the `<ul>` itself.
+              */}
+              <Reveal
+                motion="develop"
+                select="[data-speaker-card]"
+                className="w-full min-w-0"
+              >
+                <SpeakerCarousel people={group.people} />
+              </Reveal>
             </div>
           ))}
         </div>
@@ -67,8 +83,6 @@ export function SpeakerSection({
 const speakerLabel = ({ title }: { title: string }) => {
   return (
     <div
-      // Animation hook for callers that reveal the pills on scroll.
-      data-speaker-label
       className="relative py-3 px-20 max-md:px-16 text-white font-bold text-2xl max-md:text-xl"
       style={{
         background:

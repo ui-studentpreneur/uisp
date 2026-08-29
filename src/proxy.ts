@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 
-import { applySecurityHeaders } from "@/lib/proxy";
+import { applySecurityHeaders, requireAdminSession } from "@/lib/proxy";
 
 /**
  * Next 16 renamed Middleware to Proxy. Only one `proxy.ts` per project is
@@ -11,7 +11,11 @@ import { applySecurityHeaders } from "@/lib/proxy";
  * Not for slow work, and not the sole authorization check — verify auth inside
  * Server Components, Server Actions and Route Handlers too.
  */
-export function proxy() {
+export function proxy(request: NextRequest) {
+  // Redirects short-circuit: there is no page to add headers to.
+  const redirected = requireAdminSession(request);
+  if (redirected) return redirected;
+
   return applySecurityHeaders(NextResponse.next());
 }
 

@@ -10,7 +10,7 @@ import { SocialLinks } from "./social-links";
  * The row is left at the flex default `items-stretch` on purpose — that is what
  * lets the rule size itself to the taller column instead of collapsing.
  */
-export function FooterBrand() {
+export async function FooterBrand() {
   return (
     <div className="flex gap-6">
       <Image
@@ -21,7 +21,10 @@ export function FooterBrand() {
         className="h-20 w-auto shrink-0"
       />
 
-      <div aria-hidden className="w-1.5 rounded-full shrink-0 bg-gradient-gold" />
+      <div
+        aria-hidden
+        className="w-1.5 rounded-full shrink-0 bg-gradient-gold"
+      />
 
       <div className="flex flex-col justify-between">
         <Image

@@ -1,30 +1,45 @@
-import { Button, Container } from "@/components/ui";
-import { registrationUrls } from "@/config";
+import { Button, Container, Reveal } from "@/components/ui";
 
-const CtaSeminar = () => {
+const CtaSeminar = ({
+  benefitHeading,
+  benefitBody,
+  heading,
+  ctaText,
+  ctaLink,
+}: {
+  benefitHeading: string;
+  benefitBody: string;
+  heading: string;
+  ctaText: string;
+  ctaLink: string;
+}) => {
   return (
     <section className="relative flex-col gap-10 isolate">
       <div className="absolute bottom-0 translate-y-1/2 left-1/2 z-0 size-100 -translate-x-1/2 rounded-full bg-blue-100 blur-[300px]" />
-      <Container className="flex flex-col gap-4 max-md:gap-2">
-        <p className="text-gradient-gold max-w-3xl text-2xl font-bold">
-          Benefit
-        </p>
-        <p className="text-gradient-gold text-xl font-bold max-md:text-lg">
-          Participants will gain valuable insights from experienced
-          professionals, expand their network, and deepen their understanding of
-          entrepreneurship through inspiring discussions and knowledge-sharing
-          sessions
-        </p>
+      <Container>
+        <Reveal motion="brief" className="flex flex-col gap-4 max-md:gap-2">
+          <p className="text-gradient-gold max-w-3xl text-2xl font-bold">
+            {benefitHeading}
+          </p>
+          <p className="text-gradient-gold text-xl font-bold max-md:text-lg">
+            {benefitBody}
+          </p>
+        </Reveal>
       </Container>
 
-      <Container className="relative z-10 flex flex-col items-center gap-8 py-24 text-center max-md:gap-6 max-md:py-16">
-        <p className="text-gradient-gold max-w-3xl text-2xl font-bold max-md:text-lg">
-          Ready to Discover New Insights?
-        </p>
+      <Container className="relative z-10 py-24 text-center max-md:py-16">
+        <Reveal
+          motion="rally"
+          className="flex flex-col items-center gap-8 max-md:gap-6"
+        >
+          <p className="text-gradient-gold max-w-3xl text-2xl font-bold max-md:text-lg">
+            {heading}
+          </p>
 
-        <a href={registrationUrls.seminar} target="_blank" rel="noopener noreferrer">
-          <Button size="lg">Register Now!</Button>
-        </a>
+          <a href={ctaLink} target="_blank" rel="noopener noreferrer">
+            <Button size="lg">{ctaText}</Button>
+          </a>
+        </Reveal>
       </Container>
     </section>
   );

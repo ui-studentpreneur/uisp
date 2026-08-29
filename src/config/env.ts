@@ -45,6 +45,12 @@ export type ClientEnv = typeof clientEnv;
 export type ServerEnv = {
   nodeEnv: string;
   logLevel: "debug" | "info" | "warn" | "error";
+  /** PostgreSQL connection string. */
+  databaseUrl: string;
+  /** Signing key for Better Auth sessions. */
+  authSecret: string;
+  /** Absolute origin Better Auth issues callbacks against. */
+  authUrl: string;
 };
 
 let cached: ServerEnv | undefined;
@@ -61,6 +67,11 @@ export function serverEnv(): ServerEnv {
       ["debug", "info", "warn", "error"] as const,
       clientEnv.isProduction ? "info" : "debug",
     ),
+    databaseUrl: reader.string("DATABASE_URL"),
+    authSecret: reader.string("BETTER_AUTH_SECRET"),
+    // Falls back to the public origin so a deployment that sets only
+    // NEXT_PUBLIC_SITE_URL still issues callbacks against itself.
+    authUrl: reader.url("BETTER_AUTH_URL", clientEnv.siteUrl),
   });
 
   return cached;

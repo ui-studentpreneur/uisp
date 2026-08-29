@@ -230,6 +230,86 @@ This version differs from older App Router material — check `node_modules/next
 - **Route Handlers are uncached by default**; opt in per file with `export const dynamic = 'force-static'`.
 - **React Compiler is enabled** (`reactCompiler: true`). Do not hand-add `useMemo`/`useCallback` for render performance. The lint rules are strict about `setState` inside effects — reach for `useSyncExternalStore` for external state (see `hooks/use-media-query.ts`).
 
+## Content is in the database, not in the components
+
+Every string, image path and list on the marketing pages and the footer is
+editable at `/admin`. **Do not hardcode copy into a component.** A section that
+needs new text needs a new field in the registry, not a literal in JSX.
+
+```
+src/config/content/     the registry — one file per page
+├── types.ts            Field / BlockSpec / CollectionSpec / PageSpec
+└── index.ts            assembles `contentPages` + key lookups
+
+src/lib/content/        read path: readBlock, readItems, groupItems, mappers
+src/lib/db/             drizzle schema + client (auth tables + content tables)
+src/lib/auth/           Better Auth instance, session helpers
+src/features/admin/     the editor UI and its Server Actions
+```
+
+Two shapes cover everything. A **block** is a section that exists once
+(`home.hero`); its fields live in one `jsonb` payload. An **item** is one entry
+in an ordered list (`home.timeline`); many rows, ordered by `position`. A block
+key and a collection key may be the same string — `home.timeline` is both the
+heading and the list — so they are looked up in separate maps.
+
+`src/config/content/*` is the single source of truth for three consumers that
+would otherwise drift: the admin form renders from it, `pnpm db:seed` writes
+from it, and `readBlock`/`readItems` fall back to it when a row is missing.
+**Adding a field is an edit to that file and nothing else** — no migration, no
+new form. Every value is a string; nothing here needs a number or a boolean.
+
+### Adding editable content
+
+1. Add the field to the block, or the collection to the page, in
+   `src/config/content/<page>.ts`, with its current value as the default.
+2. Read it in that feature's `server/queries.ts` and pass it down as a prop.
+3. `pnpm db:seed` to write the new defaults. Blocks are upserted; collections
+   are only written when empty, so re-running never duplicates or reorders.
+
+Components take content as props and know nothing about the database. The
+`Record<string, string>` a row comes back as does **not** satisfy a type with
+named required fields, so `server/queries.ts` names them — that mapping belongs
+there and nowhere else.
+
+### Auth
+
+Better Auth with email and password, one account, no sign-up route
+(`disableSignUp: true`). Create or rotate it with `pnpm admin:create`, reading
+`ADMIN_EMAIL` / `ADMIN_PASSWORD` from `.env.local`.
+
+`proxy.ts` bounces anonymous requests off `/admin`, but it only checks that a
+cookie *exists* — the real gate is `requireUser()` in
+`app/admin/(dashboard)/layout.tsx` and at the top of **every** Server Action. A
+Server Action is a POST any client can craft; the proxy is a redirect, not a
+guard.
+
+Server Actions return `Result<T>`, so they are wired through `<ActionForm>`,
+which consumes the value with `useActionState` — React's bare `action={fn}`
+discards the return value. Hence the `(…bound, previousState, formData)` shape.
+
+### Why the pages are still static
+
+The public routes prerender at build time and every mutating action calls
+`revalidatePath("/", "layout")`. That combination — not per-request rendering —
+is what makes an edit appear immediately while keeping the pages static.
+Verified end to end: save in the admin, and the prerendered page serves the new
+copy on the next request.
+
+### Database commands
+
+```bash
+pnpm db:push        # apply src/lib/db/schema.ts to the database
+pnpm db:seed        # admin account + content defaults (idempotent)
+pnpm admin:create   # create or reset the admin password
+pnpm db:studio      # browse the data
+```
+
+The seed and admin scripts run under `--conditions=react-server` so the
+`server-only` imports resolve to their empty build; without it that package
+throws, because outside a bundler it cannot tell a script from a Client
+Component.
+
 ## Checks
 
 ```bash

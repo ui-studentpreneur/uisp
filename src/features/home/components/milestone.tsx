@@ -1,28 +1,21 @@
 import { Container, Reveal } from "@/components/ui";
 import Image from "next/image";
 
-const data = [
-  {
-    image: "/milestone1.svg",
-    title: "Grand Opening Webinar",
-  },
-  {
-    image: "/milestone2.svg",
-    title: "Championpreneur Talks",
-  },
-  {
-    image: "/milestone3.svg",
-    title: "Young Entrepreneur Summit",
-  },
-];
+import type { MilestoneItem } from "../types";
 
-const MilestoneSection = () => {
+const MilestoneSection = ({
+  heading,
+  items,
+}: {
+  heading: string;
+  items: readonly MilestoneItem[];
+}) => {
   return (
     <section id="milestone" className="relative isolate flex items-center">
       <div className="flex w-full flex-col items-center gap-20 max-md:gap-10 py-24 text-center">
         <Reveal motion="stamp">
           <h2 className="text-gradient-gold text-3xl font-bold tracking-tight sm:text-4xl">
-            Our Milestones
+            {heading}
           </h2>
         </Reveal>
 
@@ -33,7 +26,7 @@ const MilestoneSection = () => {
             motion="deal"
             className="flex max-md:flex-col justify-center items-center gap-20"
           >
-            {data.map((item, index) => (
+            {items.map((item, index) => (
               <div
                 key={index}
                 className="p-1 max-w-70 rounded-3xl bg-gradient-gold"

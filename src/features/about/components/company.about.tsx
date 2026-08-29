@@ -1,22 +1,18 @@
-import { Container } from "@/components/ui";
+import { Container, Reveal } from "@/components/ui";
 
 import VideoPlayer from "./video-player.about";
 
-const VIDEO_TITLE = "UI Studentpreneurs Company Profile";
-
-/** Placeholder source — swap for the real company profile once it is up. */
-const VIDEO_SRC = "https://www.youtube.com/watch?v=LXb3EKWsInQ";
-
-const CompanyVideo = () => {
+const CompanyVideo = ({ src, title }: { src: string; title: string }) => {
   return (
     <section id="company-video" className="relative isolate flex items-center">
-
       <Container className="relative z-10 flex flex-col items-center">
-        <div className="relative w-full max-w-7xl">
-          <div className="aspect-video w-full">
-            <VideoPlayer src={VIDEO_SRC} title={VIDEO_TITLE} />
+        <Reveal motion="unfurl" className="w-full">
+          <div className="relative w-full max-w-7xl">
+            <div className="aspect-video w-full">
+              <VideoPlayer src={src} title={title} />
+            </div>
           </div>
-        </div>
+        </Reveal>
       </Container>
     </section>
   );

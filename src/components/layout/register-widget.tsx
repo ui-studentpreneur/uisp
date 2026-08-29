@@ -23,9 +23,11 @@ import { cn } from "@/lib/utils";
 export function RegisterWidget({
   href,
   label = "Register Now!",
+  headline = "Ready to Grow Beyond Limits?",
 }: {
   href: string;
   label?: string;
+  headline?: string;
 }) {
   const sentinel = useRef<HTMLDivElement>(null);
   const [scrolledPast, setScrolledPast] = useState(false);
@@ -69,7 +71,7 @@ export function RegisterWidget({
           }}
         >
           <p className="text-white w-[80%] font-bold text-xl max-md:text-lg text-center">
-            Ready to Grow Beyond Limits?
+            {headline}
           </p>
           <a
             href={href}

@@ -11,7 +11,8 @@
  * finishes its entrance long before anybody has scrolled to it.
  */
 
-export type RevealMotion = "stamp" | "deal" | "unfurl" | "develop";
+export type RevealMotion =
+  "stamp" | "deal" | "unfurl" | "develop" | "brief" | "rally";
 
 type Choreography = {
   from: gsap.TweenVars;
@@ -100,6 +101,40 @@ export const MOTIONS: Record<RevealMotion, Choreography> = {
    * carousel keeps for its loop, and blurring that many portraits at once is
    * what turns a phone's entrance into a stutter.
    */
+  /**
+   * Stacked fact blocks — dates, locations, a description. A short fade and a
+   * small rise, nothing else.
+   *
+   * Deliberately the plainest motion here. Body copy is read, not watched: a
+   * masked or wiping entrance makes the reader wait on the words instead of
+   * starting them, and it looks worse the longer the paragraph is.
+   *
+   * Per target with no stagger, on purpose: these stack taller than a viewport,
+   * and scrolling past them already spaces their arrivals out.
+   */
+  brief: {
+    from: { autoAlpha: 0, y: 24 },
+    to: { autoAlpha: 1, y: 0, duration: 0.6, ease: "power2.out" },
+    perTarget: true,
+  },
+
+  /**
+   * Closing calls to action. The line and its button spring up together with a
+   * little overshoot — the one place on a page where the motion is allowed to
+   * be eager, because it is asking for something.
+   */
+  rally: {
+    from: { autoAlpha: 0, y: 44, scale: 0.94 },
+    to: {
+      autoAlpha: 1,
+      y: 0,
+      scale: 1,
+      duration: 0.7,
+      ease: "back.out(1.7)",
+      stagger: 0.12,
+    },
+  },
+
   develop: {
     from: { autoAlpha: 0, y: 36, scale: 0.94, filter: "saturate(0.2)" },
     to: {

@@ -1,12 +1,14 @@
 import Image from "next/image";
 
-import { socialLinks } from "@/config";
+import { readItems } from "@/lib/content/queries";
 
-export function SocialLinks() {
+export async function SocialLinks() {
+  const socials = await readItems("footer.social");
+
   return (
     <ul className="flex items-center gap-4">
-      {socialLinks.map((social) => (
-        <li key={social.label}>
+      {socials.map((social) => (
+        <li key={social.id}>
           <a
             href={social.href}
             target="_blank"

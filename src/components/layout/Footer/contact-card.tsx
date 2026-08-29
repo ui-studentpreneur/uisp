@@ -1,4 +1,9 @@
-import type { ContactCard as ContactCardData } from "@/config";
+/** One contact, as stored under the `footer.contacts` collection. */
+export type ContactCardData = {
+  title: string;
+  phone: string;
+  email: string;
+};
 
 /** `tel:` rejects spaces, so strip everything that is not a digit or `+`. */
 function telHref(phone: string): string {
@@ -14,7 +19,10 @@ export function ContactCard({ card }: { card: ContactCardData }) {
       </h3>
 
       <div className="mt-3 space-y-1 text-sm text-gold-100/80">
-        <a href={telHref(card.phone)} className="block transition-colors hover:text-gold-300">
+        <a
+          href={telHref(card.phone)}
+          className="block transition-colors hover:text-gold-300"
+        >
           {card.phone}
         </a>
         <a

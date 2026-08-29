@@ -1,34 +1,62 @@
-import type { Highlight } from "../types";
+import "server-only";
+
+import {
+  groupItems,
+  readBlock,
+  readItems,
+  toSpeakerGroups,
+} from "@/lib/content/queries";
 
 /**
- * Read path for the home feature. Server-only by convention: it lives under
- * `server/` and is imported exclusively by Server Components.
+ * Read path for the home feature.
  *
- * Swap the static array for a database or `createHttpClient` call — every
- * caller already awaits this signature.
+ * One function fetching everything in parallel rather than a read per section:
+ * the sections are siblings in one render, so sequential awaits would stack
+ * their latencies for no reason.
  */
-export async function getHighlights(): Promise<readonly Highlight[]> {
-  return [
-    {
-      id: "routing",
-      title: "Thin routes",
-      description:
-        "Files under app/ only wire a URL to a feature. Composition and data live in features/.",
-      href: "https://nextjs.org/docs/app/getting-started/project-structure",
+export async function getHomeContent() {
+  const [
+    hero,
+    timelineHeading,
+    timeline,
+    milestoneHeading,
+    milestones,
+    speakerHeading,
+    speakers,
+    sponsors,
+  ] = await Promise.all([
+    readBlock("home.hero"),
+    readBlock("home.timeline"),
+    readItems("home.timeline"),
+    readBlock("home.milestones"),
+    readItems("home.milestones"),
+    readBlock("home.speakers"),
+    readItems("home.speakers"),
+    readItems("home.sponsors"),
+  ]);
+
+  return {
+    hero,
+    timeline: {
+      heading: timelineHeading.heading,
+      items: timeline.map((item) => ({ date: item.date, title: item.title })),
     },
-    {
-      id: "features",
-      title: "Vertical slices",
-      description:
-        "Each feature owns its components, server code, schemas and types behind one barrel export.",
-      href: "https://nextjs.org/docs/app/getting-started/server-and-client-components",
+    milestones: {
+      heading: milestoneHeading.heading,
+      items: milestones.map((item) => ({
+        image: item.image,
+        title: item.title,
+      })),
     },
-    {
-      id: "boundaries",
-      title: "Enforced boundaries",
-      description:
-        "lib/ knows nothing about features, features never import each other's internals.",
-      href: "https://nextjs.org/docs/app/guides/data-security",
+    speakers: {
+      heading: speakerHeading.heading,
+      groups: toSpeakerGroups(speakers),
     },
-  ];
+    sponsors: groupItems(sponsors).map((group) => ({
+      title: group.title,
+      items: group.items.map((item) => ({ id: item.id, image: item.image })),
+    })),
+  };
 }
+
+export type HomeContent = Awaited<ReturnType<typeof getHomeContent>>;
