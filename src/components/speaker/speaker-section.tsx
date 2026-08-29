@@ -52,9 +52,7 @@ export function SpeakerSection({
               className="flex w-full flex-col items-center gap-20 max-md:gap-10"
             >
               <Container className="flex justify-center">
-                <Button size="lg" className="w-fit">
-                  {group.title}
-                </Button>
+                {speakerLabel({ title: group.title })}
               </Container>
 
               <SpeakerCarousel people={group.people} />
@@ -65,3 +63,31 @@ export function SpeakerSection({
     </section>
   );
 }
+
+const speakerLabel = ({ title }: { title: string }) => {
+  return (
+    <div
+      className="relative py-3 px-20 max-md:px-16 text-white font-bold text-2xl max-md:text-xl"
+      style={{
+        background:
+          "linear-gradient(90deg, rgba(255, 255, 255, 0.00) 0%, rgba(255, 255, 255, 0.15) 27.28%, rgba(255, 255, 255, 0.16) 54.22%, rgba(255, 255, 255, 0.12) 76.92%, rgba(255, 255, 255, 0.00) 100%)",
+      }}
+    >
+      <div
+        style={{
+          background:
+            "linear-gradient(90deg, rgba(177, 119, 99, 0) 0%, #F6CCB3 25%, #F5B899 48%, #F6D6BF 74%, rgba(177, 119, 99, 0) 100%)",
+        }}
+        className="w-full h-1 absolute top-0 left-0"
+      ></div>
+      <p>{title}</p>
+      <div
+        style={{
+          background:
+            "linear-gradient(90deg, rgba(177, 119, 99, 0) 0%, #F6CCB3 25%, #F5B899 48%, #F6D6BF 74%, rgba(177, 119, 99, 0) 100%)",
+        }}
+        className="w-full h-1 absolute bottom-0 left-0"
+      ></div>
+    </div>
+  );
+};

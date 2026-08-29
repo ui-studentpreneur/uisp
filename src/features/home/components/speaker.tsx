@@ -67,7 +67,10 @@ const GROUPS: readonly SpeakerGroup[] = [
  * page's — the carousel and layout are shared with `seminar/`.
  */
 const HomeSpeakerSection = () => (
-  <SpeakerSection heading="Our Previous Speakers and Assessors" groups={GROUPS} />
+  <SpeakerSection
+    heading="Our Previous Speakers and Assessors"
+    groups={GROUPS}
+  />
 );
 
 export default HomeSpeakerSection;
