@@ -14,6 +14,10 @@ const BASE =
  * Server Component — there is no `useId` to reach for, and anything random
  * would mismatch on hydration.
  *
+ * An image field is the exception: it contains a button and a file input, and
+ * a `<label>` may not wrap a labelable element that is not its own control. It
+ * gets a plain wrapper, and names its controls with `aria-label` instead.
+ *
  * Uncontrolled on purpose: the form posts to a Server Action, so React never
  * needs the value between renders, and `defaultValue` avoids a state update per
  * keystroke across what can be forty inputs on one page.
@@ -25,8 +29,10 @@ export function FieldInput({
   field: Field;
   value: string | undefined;
 }) {
+  const Wrapper = field.type === "image" ? "div" : "label";
+
   return (
-    <label className="flex flex-col gap-1.5">
+    <Wrapper className="flex flex-col gap-1.5">
       <span className="text-xs font-semibold tracking-wide text-gold-300 uppercase">
         {field.label}
       </span>
@@ -39,7 +45,12 @@ export function FieldInput({
           className={BASE}
         />
       ) : field.type === "image" ? (
-        <ImageField name={field.name} value={value ?? ""} className={BASE} />
+        <ImageField
+          name={field.name}
+          label={field.label}
+          value={value ?? ""}
+          className={BASE}
+        />
       ) : (
         <input
           name={field.name}
@@ -53,6 +64,6 @@ export function FieldInput({
       {field.help ? (
         <span className="text-xs text-gold-100/50">{field.help}</span>
       ) : null}
-    </label>
+    </Wrapper>
   );
 }

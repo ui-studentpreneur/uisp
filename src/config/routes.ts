@@ -14,6 +14,8 @@ export const routes = {
   },
   api: {
     health: "/api/health",
+    /** Presigns one image upload to R2. Signed-in editors only. */
+    adminUploadUrl: "/api/admin/upload-url",
   },
   /** Content admin. Gated by `requireUser()` on every page and action. */
   admin: "/admin",
@@ -28,6 +30,7 @@ export type AppRoute =
   | "/events/seminar"
   | "/events/youth-entrepreneur-summit"
   | "/api/health"
+  | "/api/admin/upload-url"
   | "/admin"
   | "/admin/login";
 

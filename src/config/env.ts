@@ -53,6 +53,46 @@ export type ServerEnv = {
   authUrl: string;
 };
 
+/**
+ * Cloudflare R2, the object store uploaded images live in.
+ *
+ * Read through its own reader rather than as part of `ServerEnv`, because
+ * `EnvReader.finish` throws on the first missing key in the whole object: the
+ * site renders, builds and serves every existing image without R2 configured,
+ * and only the admin's upload endpoint needs it. Folding these in would turn a
+ * missing bucket name into a blank home page.
+ */
+export type R2Env = {
+  /** Cloudflare account id — the S3 endpoint's subdomain. */
+  accountId: string;
+  accessKeyId: string;
+  secretAccessKey: string;
+  bucket: string;
+  /** Origin the bucket is publicly readable at. Never a trailing slash. */
+  publicUrl: string;
+};
+
+let cachedR2: R2Env | undefined;
+
+/** Server-only. Throws with every missing key at once on first upload. */
+export function r2Env(): R2Env {
+  if (cachedR2) return cachedR2;
+
+  const reader = new EnvReader(process.env);
+  const publicUrl = reader.url("R2_PUBLIC_URL");
+
+  cachedR2 = reader.finish<R2Env>({
+    accountId: reader.string("R2_ACCOUNT_ID"),
+    accessKeyId: reader.string("R2_ACCESS_KEY_ID"),
+    secretAccessKey: reader.string("R2_SECRET_ACCESS_KEY"),
+    bucket: reader.string("R2_BUCKET"),
+    // Stripped here so callers can always join with a single slash.
+    publicUrl: publicUrl.replace(/\/+$/, ""),
+  });
+
+  return cachedR2;
+}
+
 let cached: ServerEnv | undefined;
 
 /** Server-only. Calling this from a Client Component is a bug. */

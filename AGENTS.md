@@ -242,6 +242,7 @@ src/config/content/     the registry — one file per page
 └── index.ts            assembles `contentPages` + key lookups
 
 src/lib/content/        read path: readBlock, readItems, groupItems, mappers
+src/lib/storage/        R2: SigV4 presigning, object keys, the browser uploader
 src/lib/db/             drizzle schema + client (auth tables + content tables)
 src/lib/auth/           Better Auth instance, session helpers
 src/features/admin/     the editor UI and its Server Actions
@@ -271,6 +272,41 @@ Components take content as props and know nothing about the database. The
 `Record<string, string>` a row comes back as does **not** satisfy a type with
 named required fields, so `server/queries.ts` names them — that mapping belongs
 there and nowhere else.
+
+### Images are uploaded, not typed
+
+An `image` field is still one string, exactly like every other field — what
+changed is where the string comes from. The admin's dropzone uploads the file
+to Cloudflare R2 and writes back the public URL; the seeded `/hero.png` paths
+under `public/` keep working untouched, and a component cannot tell the two
+apart.
+
+```
+browser ──POST──▶ /api/admin/upload-url   presign (currentUser + type + size)
+browser ──PUT───▶ <account>.r2.cloudflarestorage.com/<bucket>/<key>
+browser ────────▶ writes the public URL into the field, form posts as before
+```
+
+The file never passes through the Next server, which keeps a photo clear of the
+request-body limit every serverless host imposes. Consequences worth knowing:
+
+- **The bucket needs CORS.** The PUT comes from the browser, so the bucket must
+  allow `PUT` from the site's origin. Without it the upload fails before it
+  starts, and the browser reports it as a network error.
+- **`R2_PUBLIC_URL` is in `next.config.ts`.** `next/image` rejects any remote
+  host not in `remotePatterns`, so the bucket origin is read there — the one
+  place outside `src/config/env.ts` allowed to touch `process.env`. Change the
+  bucket domain and the build must be re-run, not just the deploy.
+- **R2 config is its own env reader.** `r2Env()` in `src/config/env.ts`, not
+  part of `ServerEnv`: `EnvReader.finish` throws on any missing key in the
+  object it is given, so folding these in would turn an unset bucket name into
+  a blank home page instead of a failed upload.
+- **`sigv4.ts` is hand-rolled and verified against AWS's published test
+  vector.** If you touch it, re-check it against that vector before anything
+  else — a wrong signature is a 403 from R2 with no other clue.
+- Uploads are keyed `content/<year>/<month>/<slug>-<8 hex>.<ext>`, never the
+  bare filename: a reused key would keep serving the old bytes from the CDN
+  cache. Nothing deletes the old object when a field is repointed.
 
 ### Auth
 

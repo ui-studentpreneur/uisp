@@ -1,4 +1,11 @@
-export { clientEnv, serverEnv, type ClientEnv, type ServerEnv } from "./env";
+export {
+  clientEnv,
+  r2Env,
+  serverEnv,
+  type ClientEnv,
+  type R2Env,
+  type ServerEnv,
+} from "./env";
 export {
   contentPages,
   blockSpec,

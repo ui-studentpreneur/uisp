@@ -17,7 +17,7 @@ export type FieldType =
   | "textarea"
   /** Absolute URL, or a site-relative path. */
   | "url"
-  /** Path under `public/`, e.g. `/hero.png`. */
+  /** An image: uploaded to R2 from the admin, or a path under `public/`. */
   | "image";
 
 export type Field = {
@@ -72,7 +72,6 @@ export const heroFields: readonly Field[] = [
     name: "image",
     label: "Background image",
     type: "image",
-    help: "Path under public/, e.g. /hero.png",
   },
 ];
 
