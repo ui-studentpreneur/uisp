@@ -32,8 +32,8 @@ const OurTheme = ({
                 cropped top and bottom instead of shown whole — the zoom. */}
               <div
                 aria-hidden
-                className="animate-marquee-bg opacity-30 motion-reduce:animate-none absolute inset-y-0 left-0 w-[calc(100%+var(--marquee-tile))] [--marquee-duration:60s] [--marquee-tile:110rem] max-md:[--marquee-tile:20rem]"
-                style={{ backgroundImage: "url(/theme-bg.png)" }}
+                className="animate-marquee-bg opacity-10 motion-reduce:animate-none absolute inset-y-0 left-0 w-[calc(100%+var(--marquee-tile))] [--marquee-duration:60s] [--marquee-tile:110rem] max-md:[--marquee-tile:20rem]"
+                style={{ backgroundImage: "url(/22163.jpg)" }}
               />
               <p className="z-10  text-gradient-gold font-bold text-5xl max-md:text-xl max-w-7xl max-md:max-w-[60%] max-md:w-full max-md:px-4 mx-auto">
                 &quot;{quote}&quot;
