@@ -27,6 +27,7 @@ export async function HomeView() {
         description={content.hero.description}
         ctaText={content.hero.ctaText}
         ctaLink={content.hero.ctaLink}
+        registerMenu
       />
       <TimelineSection {...content.timeline} />
       <MilestoneSection {...content.milestones} />

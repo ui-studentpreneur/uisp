@@ -41,6 +41,18 @@ export type BlockSpec = {
 export type CollectionSpec = {
   key: string;
   title: string;
+  /**
+   * Block key this list is edited under, so the admin shows it there instead
+   * of with the other lists at the end of the page. Use it where the page
+   * order is the thing the editor is reasoning about — an event's details sit
+   * between its hero and its closing call to action, and a form that lists
+   * them out of that order is a form you have to translate.
+   *
+   * Naming the block a list already shares a key with is the normal case and
+   * not redundant: the pairing is never assumed, so leaving it off keeps the
+   * list at the end.
+   */
+  after?: string;
   /** Singular noun for the "Add …" button and the delete confirmation. */
   itemLabel: string;
   fields: readonly Field[];

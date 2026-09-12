@@ -86,6 +86,7 @@ export const seminarPage: PageSpec = {
     {
       key: "seminar.details",
       title: "Event details",
+      after: "seminar.widget",
       itemLabel: "Detail",
       fields: detailFields,
       defaults: [
@@ -101,6 +102,7 @@ export const seminarPage: PageSpec = {
     {
       key: "seminar.speakers",
       title: "Speakers",
+      after: "seminar.speakers",
       itemLabel: "Person",
       fields: speakerFields,
       defaults: [
@@ -197,6 +199,7 @@ export const summitPage: PageSpec = {
     {
       key: "summit.details",
       title: "Event details",
+      after: "summit.widget",
       itemLabel: "Detail",
       fields: detailFields,
       defaults: [
@@ -235,6 +238,7 @@ export const summitPage: PageSpec = {
     {
       key: "summit.speakers",
       title: "Mentors",
+      after: "summit.speakers",
       itemLabel: "Mentor",
       fields: speakerFields,
       defaults: [

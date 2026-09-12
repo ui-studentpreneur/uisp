@@ -48,15 +48,22 @@ export const aboutPage: PageSpec = {
           help: "Rendered inside the ellipse. Quotation marks are added for you.",
         },
         { name: "body", label: "Body", type: "textarea" },
-        { name: "valuesHeading", label: "Core values heading", type: "text" },
       ],
       defaults: {
         heading: "Introducing Our Grand Theme",
         quote:
           "Innovate Beyond Uncertainty: Empowering Young Entrepreneurs to Shape Ideas into Impact.",
         body: "Amidst economic uncertainty, The 16th UI Studentpreneurs is here to empower young entrepreneurs to ensure their ideas go beyond mere concepts. Through encouragement to innovate, take concrete operational action, and build resilience, participants are driven to transform their ideas into solutions that create a real impact for society.",
-        valuesHeading: "Core Values",
       },
+    },
+    // Shares its key with the collection below — the heading and the list it
+    // introduces are one section, so the editor meets them together. Last of
+    // the blocks on purpose: blocks render above collections in the admin.
+    {
+      key: "about.values",
+      title: "Core values heading",
+      fields: [{ name: "heading", label: "Heading", type: "text" }],
+      defaults: { heading: "Core Values" },
     },
   ],
   collections: [

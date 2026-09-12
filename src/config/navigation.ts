@@ -39,6 +39,37 @@ export const mainNav: readonly NavItem[] = [
   { label: "Contact Us", href: `#${anchors.contact}` },
 ] as const;
 
+/**
+ * One event the hero's register menu offers.
+ *
+ * These are links to pages, so they live here beside the rest of the site's
+ * navigation rather than in the content registry — the labels name routes, and
+ * renaming one without moving the route it points at would be a broken link,
+ * not an edit.
+ */
+export type RegisterOption = NavLeaf & {
+  /** Path under `public/`. Already drawn in `blue-100`, same as the labels. */
+  icon: string;
+};
+
+export const registerNav: readonly RegisterOption[] = [
+  {
+    label: "Business Model Canvas Competition",
+    href: routes.competition,
+    icon: "/regist2.svg",
+  },
+  {
+    label: "National Seminar",
+    href: routes.events.seminar,
+    icon: "/regist3.svg",
+  },
+  {
+    label: "Young Entrepreneur Summit",
+    href: routes.events.youthEntrepreneurSummit,
+    icon: "/regist1.svg",
+  },
+] as const;
+
 export const footerNav: readonly NavLeaf[] = [
   {
     label: "Documentation",

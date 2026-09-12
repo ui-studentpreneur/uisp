@@ -20,9 +20,11 @@ export {
 export {
   footerNav,
   mainNav,
+  registerNav,
   type NavGroup,
   type NavItem,
   type NavLeaf,
+  type RegisterOption,
 } from "./navigation";
 export { anchors, routes, type AppRoute } from "./routes";
 export { siteConfig, type SiteConfig } from "./site";

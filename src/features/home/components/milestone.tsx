@@ -24,14 +24,16 @@ const MilestoneSection = ({
         <Container>
           <Reveal
             motion="deal"
-            className="flex max-md:flex-col justify-center items-center gap-20"
+            className="flex max-md:flex-col justify-center items-stretch max-md:items-center gap-20"
           >
             {items.map((item, index) => (
+              // `w-70` over `max-w-70`: the cards have to be one width even
+              // when the shorter titles would let them shrink.
               <div
                 key={index}
-                className="p-1 max-w-70 rounded-3xl bg-gradient-gold"
+                className="flex w-70 max-w-full p-1 rounded-3xl bg-gradient-gold"
               >
-                <div className="rounded-3xl w-full h-full p-10 bg-gradient-timeline flex flex-col gap-6">
+                <div className="rounded-3xl w-full p-10 bg-gradient-timeline flex flex-col gap-6">
                   <Image
                     src={item.image}
                     alt={item.title}
@@ -39,7 +41,11 @@ const MilestoneSection = ({
                     height={0}
                     className="w-auto h-40 object-contain"
                   />
-                  <h3 className="text-lg font-bold text-white">{item.title}</h3>
+                  {/* Pushed to the bottom so a two-line title does not shift
+                      the image off the line its neighbours sit on. */}
+                  <h3 className="mt-auto text-lg font-bold text-white">
+                    {item.title}
+                  </h3>
                 </div>
               </div>
             ))}

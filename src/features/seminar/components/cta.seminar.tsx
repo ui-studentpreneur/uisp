@@ -17,7 +17,10 @@ const CtaSeminar = ({
     <section className="relative flex-col gap-10 isolate">
       <div className="absolute bottom-0 translate-y-1/2 left-1/2 z-0 size-100 -translate-x-1/2 rounded-full bg-blue-100 blur-[300px]" />
       <Container>
-        <Reveal motion="brief" className="flex flex-col gap-4 max-md:gap-2">
+        {/* `rally`, not `brief`: this is still the closing ask, and the summit
+            page states it in one motion. Two blocks on one page reading as two
+            different gestures is what made the pages feel unrelated. */}
+        <Reveal motion="rally" className="flex flex-col gap-4 max-md:gap-2">
           <p className="text-gradient-gold max-w-3xl text-2xl font-bold">
             {benefitHeading}
           </p>

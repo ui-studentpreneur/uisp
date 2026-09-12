@@ -15,7 +15,7 @@ export type EventDetailData = {
   body?: string;
 };
 
-const VALUE = "font-bold text-xl text-gold-300";
+const VALUE = "font-bold text-justify text-gold-300";
 
 export function EventDetail({ detail }: { detail: EventDetailData }) {
   return (

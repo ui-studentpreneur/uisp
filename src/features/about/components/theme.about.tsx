@@ -25,17 +25,34 @@ const OurTheme = ({
         {/* The wrapper takes the ellipse's box so the unfurl has something
             definite to clip: `w-[150%]` measured against a shrink-to-fit
             wrapper would collapse. */}
-        <Reveal motion="unfurl" className="w-[150%] h-120 max-md:h-50">
+        <Reveal motion="unfurl" className="w-[150%] h-120 max-md:h-64">
           <div className="w-full h-full bg-gradient-gold rounded-[50%] p-1">
             <div className="w-full relative h-full flex justify-center items-center bg-gradient-donker rounded-[50%] overflow-hidden">
-              {/* Tile is 1.5x the container height, so the square source is
-                cropped top and bottom instead of shown whole — the zoom. */}
+              {/*
+                `--marquee-tile` is the tile's WIDTH and the height follows the
+                source's own ratio, so it has to be read against this box's
+                height or `repeat-x` leaves bare strips above and below.
+
+                /22163.jpg is 1600x488 — a wide strip, not a square — so the
+                tile stands 0.305x as tall as it is wide. Each breakpoint keeps
+                the tile ~1.1x the ellipse's height, which is the crop:
+
+                  desktop  110rem = 1760px -> 537px tall vs h-120 (480px)
+                  mobile    56rem =  896px -> 273px tall vs h-64  (256px)
+
+                Shrinking the mobile tile to fit the smaller ellipse is the
+                trap: 20rem stood only 98px tall and the photo showed as a band
+                through the middle.
+              */}
               <div
                 aria-hidden
-                className="animate-marquee-bg opacity-10 motion-reduce:animate-none absolute inset-y-0 left-0 w-[calc(100%+var(--marquee-tile))] [--marquee-duration:60s] [--marquee-tile:110rem] max-md:[--marquee-tile:20rem]"
+                className="animate-marquee-bg opacity-10 motion-reduce:animate-none absolute inset-y-0 left-0 w-[calc(100%+var(--marquee-tile))] [--marquee-duration:60s] [--marquee-tile:110rem] max-md:[--marquee-tile:56rem]"
                 style={{ backgroundImage: "url(/22163.jpg)" }}
               />
-              <p className="z-10  text-gradient-gold font-bold text-5xl max-md:text-xl max-w-7xl max-md:max-w-[60%] max-md:w-full max-md:px-4 mx-auto">
+              {/* The ellipse narrows toward its ends, so the quote is held to a
+                  measure that clears the curve — and the mobile ellipse is tall
+                  enough (h-64) for the four lines that measure wraps to. */}
+              <p className="z-10  text-gradient-gold font-bold text-5xl max-md:text-base max-w-7xl max-md:max-w-[62%] max-md:w-full max-md:px-4 mx-auto">
                 &quot;{quote}&quot;
               </p>
             </div>

@@ -8,7 +8,8 @@ import OurTheme from "./components/theme.about";
 import { getAboutContent } from "./server/queries";
 
 export async function AboutPage() {
-  const { hero, video, theme, values } = await getAboutContent();
+  const { hero, video, theme, valuesHeading, values } =
+    await getAboutContent();
 
   return (
     <main className="w-full overflow-hidden relative min-h-screen bg-blue-700">
@@ -18,7 +19,7 @@ export async function AboutPage() {
         heading={theme.heading}
         quote={theme.quote}
         body={theme.body}
-        valuesHeading={theme.valuesHeading}
+        valuesHeading={valuesHeading}
         values={values}
       />
     </main>

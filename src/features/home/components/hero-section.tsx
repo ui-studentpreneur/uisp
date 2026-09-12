@@ -1,5 +1,6 @@
 import Image from "next/image";
 
+import { RegisterMenu } from "@/components/layout";
 import {
   Button,
   Container,
@@ -22,8 +23,16 @@ const COPY_DRIFT = -80;
  *
  * `data-parallax` marks this as the scroll window both moving layers measure
  * from — see `components/ui/parallax.tsx`. The photo scrolls slower than the
- * page and the copy slightly faster, which is the whole depth cue. The
- * section's `overflow-hidden` is what clips the oversized photo layer.
+ * page and the copy slightly faster, which is the whole depth cue. The photo
+ * layer clips itself (`ParallaxBackground` is `overflow-hidden`), so this
+ * section deliberately does not: the register menu hangs below the button and
+ * a clip here would cut it off on a short viewport. `z-10` is what then keeps
+ * the open menu above the section that follows.
+ *
+ * `registerMenu` swaps the single call to action for the menu of all three
+ * events. The landing page is the only hero that does not belong to one event,
+ * so it is the only one with something to choose between; every other hero
+ * registers for the event it is already on and keeps its own `ctaLink`.
  *
  * `-z-10` inside `isolate` puts the photo behind the copy but still inside this
  * section's stacking context. The heading's gradient is painted through
@@ -36,17 +45,20 @@ export function HeroSection({
   description,
   ctaText,
   ctaLink,
+  registerMenu = false,
 }: {
   image: string;
   heading: string;
   description: string;
   ctaText: string;
   ctaLink: string;
+  /** Offer the three events instead of linking straight to `ctaLink`. */
+  registerMenu?: boolean;
 }) {
   return (
     <section
       data-parallax
-      className="relative isolate flex min-h-[calc(100dvh-var(--navbar-height))] overflow-hidden"
+      className="relative isolate z-10 flex min-h-[calc(100dvh-var(--navbar-height))]"
     >
       <ParallaxBackground className="-z-10">
         <Image
@@ -74,9 +86,13 @@ export function HeroSection({
 
           <p className=" text-lg leading-8 text-gold-300">{description}</p>
 
-          <a href={ctaLink} target="_blank" rel="noopener noreferrer">
-            <Button size="lg">{ctaText}</Button>
-          </a>
+          {registerMenu ? (
+            <RegisterMenu label={ctaText} />
+          ) : (
+            <a href={ctaLink} target="_blank" rel="noopener noreferrer">
+              <Button size="lg">{ctaText}</Button>
+            </a>
+          )}
         </ParallaxItem>
       </Container>
     </section>
