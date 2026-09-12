@@ -21,7 +21,7 @@ export const footerPage: PageSpec = {
           name: "phone",
           label: "Phone",
           type: "text",
-          help: "Spaces are fine — the tel: link strips them.",
+          help: "Spaces are fine — the WhatsApp link strips them.",
         },
         { name: "email", label: "Email", type: "text" },
       ],

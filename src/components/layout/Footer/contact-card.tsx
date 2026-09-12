@@ -5,9 +5,14 @@ export type ContactCardData = {
   email: string;
 };
 
-/** `tel:` rejects spaces, so strip everything that is not a digit or `+`. */
-function telHref(phone: string): string {
-  return `tel:${phone.replace(/[^\d+]/g, "")}`;
+/**
+ * wa.me wants digits only, in international form — no `+`, no separators, and
+ * no leading `0`, which is the local-dial prefix Indonesian numbers are often
+ * written with.
+ */
+function whatsappHref(phone: string): string {
+  const digits = phone.replace(/\D/g, "").replace(/^0/, "62");
+  return `https://wa.me/${digits}`;
 }
 
 export function ContactCard({ card }: { card: ContactCardData }) {
@@ -20,7 +25,9 @@ export function ContactCard({ card }: { card: ContactCardData }) {
 
       <div className="mt-3 space-y-1 text-sm text-gold-100/80">
         <a
-          href={telHref(card.phone)}
+          href={whatsappHref(card.phone)}
+          target="_blank"
+          rel="noopener noreferrer"
           className="block transition-colors hover:text-gold-300"
         >
           {card.phone}
