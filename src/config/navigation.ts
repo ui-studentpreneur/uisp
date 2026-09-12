@@ -42,12 +42,15 @@ export const mainNav: readonly NavItem[] = [
 /**
  * One event the hero's register menu offers.
  *
- * These are links to pages, so they live here beside the rest of the site's
- * navigation rather than in the content registry — the labels name routes, and
- * renaming one without moving the route it points at would be a broken link,
- * not an edit.
+ * The destination is not a page: it is `ctaLink` on the named block, which is
+ * the same registration URL that event's own Register button opens. Storing
+ * the block key rather than the URL is what keeps the two in step — change the
+ * form link in the admin once and both buttons follow.
  */
-export type RegisterOption = NavLeaf & {
+export type RegisterOption = {
+  label: string;
+  /** Block whose `ctaLink` this opens. */
+  block: string;
   /** Path under `public/`. Already drawn in `blue-100`, same as the labels. */
   icon: string;
 };
@@ -55,17 +58,17 @@ export type RegisterOption = NavLeaf & {
 export const registerNav: readonly RegisterOption[] = [
   {
     label: "Business Model Canvas Competition",
-    href: routes.competition,
+    block: "competition.hero",
     icon: "/regist2.svg",
   },
   {
     label: "National Seminar",
-    href: routes.events.seminar,
+    block: "seminar.hero",
     icon: "/regist3.svg",
   },
   {
     label: "Young Entrepreneur Summit",
-    href: routes.events.youthEntrepreneurSummit,
+    block: "summit.hero",
     icon: "/regist1.svg",
   },
 ] as const;

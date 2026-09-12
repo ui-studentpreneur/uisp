@@ -1,6 +1,9 @@
 import Image from "next/image";
 
-import { RegisterMenu } from "@/components/layout";
+import {
+  RegisterMenu,
+  type RegisterMenuOption,
+} from "@/components/layout";
 import {
   Button,
   Container,
@@ -29,10 +32,11 @@ const COPY_DRIFT = -80;
  * a clip here would cut it off on a short viewport. `z-10` is what then keeps
  * the open menu above the section that follows.
  *
- * `registerMenu` swaps the single call to action for the menu of all three
- * events. The landing page is the only hero that does not belong to one event,
- * so it is the only one with something to choose between; every other hero
- * registers for the event it is already on and keeps its own `ctaLink`.
+ * `registerOptions` swaps the single call to action for the menu of all three
+ * events, each opening that event's own registration link. The landing page is
+ * the only hero that does not belong to one event, so it is the only one with
+ * something to choose between; every other hero registers for the event it is
+ * already on and keeps its own `ctaLink`.
  *
  * `-z-10` inside `isolate` puts the photo behind the copy but still inside this
  * section's stacking context. The heading's gradient is painted through
@@ -45,7 +49,7 @@ export function HeroSection({
   description,
   ctaText,
   ctaLink,
-  registerMenu = false,
+  registerOptions,
 }: {
   image: string;
   heading: string;
@@ -53,7 +57,7 @@ export function HeroSection({
   ctaText: string;
   ctaLink: string;
   /** Offer the three events instead of linking straight to `ctaLink`. */
-  registerMenu?: boolean;
+  registerOptions?: readonly RegisterMenuOption[];
 }) {
   return (
     <section
@@ -86,8 +90,8 @@ export function HeroSection({
 
           <p className=" text-lg leading-8 text-gold-300">{description}</p>
 
-          {registerMenu ? (
-            <RegisterMenu label={ctaText} />
+          {registerOptions ? (
+            <RegisterMenu label={ctaText} options={registerOptions} />
           ) : (
             <a href={ctaLink} target="_blank" rel="noopener noreferrer">
               <Button size="lg">{ctaText}</Button>

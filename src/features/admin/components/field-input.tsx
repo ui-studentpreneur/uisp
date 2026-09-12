@@ -44,6 +44,18 @@ export function FieldInput({
           rows={5}
           className={BASE}
         />
+      ) : field.type === "select" ? (
+        <select
+          name={field.name}
+          defaultValue={value ?? ""}
+          className={BASE}
+        >
+          {(field.options ?? []).map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
       ) : field.type === "image" ? (
         <ImageField
           name={field.name}

@@ -32,12 +32,15 @@ export function CollectionEditor({
           Nothing here yet. Add the first {spec.itemLabel.toLowerCase()}.
         </p>
       ) : (
-        <ul className="flex flex-col gap-4">
+        // Tighter than the gap between sections: collapsed rows read as one
+        // list, and forty-seven of them spaced like cards do not.
+        <ul className="flex flex-col gap-2">
           {items.map((item, index) => (
             <ItemForm
               key={item.id}
               spec={spec}
               item={item}
+              index={index}
               isFirst={index === 0}
               isLast={index === items.length - 1}
             />

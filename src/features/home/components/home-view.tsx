@@ -20,14 +20,14 @@ export async function HomeView() {
   const content = await getHomeContent();
 
   return (
-    <main className="bg-gradient-donker">
+    <main className="bg-gradient-donker overflow-hidden">
       <HeroSection
         image={content.hero.image}
         heading={content.hero.heading}
         description={content.hero.description}
         ctaText={content.hero.ctaText}
         ctaLink={content.hero.ctaLink}
-        registerMenu
+        registerOptions={content.registerOptions}
       />
       <TimelineSection {...content.timeline} />
       <MilestoneSection {...content.milestones} />

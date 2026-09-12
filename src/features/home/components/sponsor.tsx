@@ -5,8 +5,18 @@ import { Marquee } from "./marquee";
 /** One band: a heading and the logos that scroll beneath it. */
 export type SponsorBand = {
   title: string;
-  items: readonly { id: string; image?: string }[];
+  items: readonly { id: string; image?: string; tier?: string }[];
 };
+
+/**
+ * The tier that earns the upper row. Matched leniently on the way in, but only
+ * an explicit match counts — a logo with no tier stored, which is every row
+ * seeded before this field existed, is Regular.
+ */
+const MAIN_TIER = "Main";
+
+const isMain = (tier: string | undefined) =>
+  tier?.trim().toLowerCase() === MAIN_TIER.toLowerCase();
 
 /**
  * Seconds of travel per logo. Duration is derived from the row's length, so a
@@ -15,7 +25,7 @@ export type SponsorBand = {
 const SECONDS_PER_ITEM = 3;
 
 /**
- * Relative speed of each row. The first row drifts slower than the second,
+ * Relative speed of each row. The main row drifts slower than the regular one,
  * which is what gives the two bands their parallax against each other.
  */
 const ROW_SPEED = [0.7, 1.4] as const;
@@ -40,10 +50,13 @@ const SponsorSection = ({ groups }: { groups: readonly SponsorBand[] }) => {
     <section id="sponsor" className="relative isolate flex items-center">
       <div className="relative z-10 flex w-full flex-col items-center gap-20 py-24 text-center max-md:gap-10">
         {groups.map((sponsor) => {
-          // The same logos twice: two bands drifting at different speeds and
-          // in opposite directions is what gives the section its depth.
-          const logos = sponsor.items.map((item) => item.image ?? "");
-          const rows = [logos, logos];
+          // Two different sets of logos, not one set twice: the main tier
+          // scrolls above at the larger size, the regular tier below. A tier
+          // nobody has filled renders no row at all rather than an empty band.
+          const rows = [
+            sponsor.items.filter((item) => isMain(item.tier)),
+            sponsor.items.filter((item) => !isMain(item.tier)),
+          ].map((tier) => tier.map((item) => item.image ?? ""));
 
           return (
             <div
@@ -73,26 +86,28 @@ const SponsorSection = ({ groups }: { groups: readonly SponsorBand[] }) => {
                     className="flex w-full flex-col gap-10 py-10"
                     style={{ background: SHEEN }}
                   >
-                    {rows.map((logos, row) => (
-                      <Marquee
-                        key={row}
-                        seconds={marqueeSeconds(logos.length, row)}
-                        reverse={ROW_REVERSED[row]}
-                      >
-                        {logos.map((logo, index) => (
-                          <img
-                            key={`${logo}-${index}`}
-                            src={logo}
-                            alt=""
-                            className={
-                              row === 0
-                                ? "h-20 w-auto object-contain"
-                                : "h-15 w-auto object-contain"
-                            }
-                          />
-                        ))}
-                      </Marquee>
-                    ))}
+                    {rows.map((logos, row) =>
+                      logos.length === 0 ? null : (
+                        <Marquee
+                          key={row}
+                          seconds={marqueeSeconds(logos.length, row)}
+                          reverse={ROW_REVERSED[row]}
+                        >
+                          {logos.map((logo, index) => (
+                            <img
+                              key={`${logo}-${index}`}
+                              src={logo}
+                              alt=""
+                              className={
+                                row === 0
+                                  ? "h-20 w-auto object-contain"
+                                  : "h-15 w-auto object-contain"
+                              }
+                            />
+                          ))}
+                        </Marquee>
+                      ),
+                    )}
                   </div>
                 </div>
               </Reveal>

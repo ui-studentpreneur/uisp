@@ -1,5 +1,6 @@
 import "server-only";
 
+import { registerNav } from "@/config";
 import {
   groupItems,
   readBlock,
@@ -15,6 +16,18 @@ import {
  * their latencies for no reason.
  */
 export async function getHomeContent() {
+  // The hero's register menu opens each event's own registration link, so the
+  // three event heroes are read for their `ctaLink` and nothing else. Reading
+  // them here rather than in each event feature keeps the home page to one
+  // round trip; they are content keys, not another feature's internals.
+  const registerLinks = Promise.all(
+    registerNav.map(async (option) => ({
+      label: option.label,
+      icon: option.icon,
+      href: (await readBlock(option.block)).ctaLink ?? "",
+    })),
+  );
+
   const [
     hero,
     timelineHeading,
@@ -24,6 +37,7 @@ export async function getHomeContent() {
     speakerHeading,
     speakers,
     sponsors,
+    registerOptions,
   ] = await Promise.all([
     readBlock("home.hero"),
     readBlock("home.timeline"),
@@ -33,10 +47,12 @@ export async function getHomeContent() {
     readBlock("home.speakers"),
     readItems("home.speakers"),
     readItems("home.sponsors"),
+    registerLinks,
   ]);
 
   return {
     hero,
+    registerOptions,
     timeline: {
       heading: timelineHeading.heading,
       items: timeline.map((item) => ({ date: item.date, title: item.title })),
@@ -54,7 +70,11 @@ export async function getHomeContent() {
     },
     sponsors: groupItems(sponsors).map((group) => ({
       title: group.title,
-      items: group.items.map((item) => ({ id: item.id, image: item.image })),
+      items: group.items.map((item) => ({
+        id: item.id,
+        image: item.image,
+        tier: item.tier,
+      })),
     })),
   };
 }

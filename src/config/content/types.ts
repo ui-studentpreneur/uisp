@@ -18,12 +18,16 @@ export type FieldType =
   /** Absolute URL, or a site-relative path. */
   | "url"
   /** An image: uploaded to R2 from the admin, or a path under `public/`. */
-  | "image";
+  | "image"
+  /** One of `options`. Still a string — this only narrows what can be typed. */
+  | "select";
 
 export type Field = {
   name: string;
   label: string;
   type: FieldType;
+  /** The choices for a `select`. Ignored by every other type. */
+  options?: readonly string[];
   /** Shown under the input. Use it for anything non-obvious. */
   help?: string;
 };
