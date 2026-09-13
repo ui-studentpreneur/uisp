@@ -64,18 +64,13 @@ export const seminarPage: PageSpec = {
     },
     {
       key: "seminar.cta",
-      title: "Benefit and closing call to action",
+      title: "Closing call to action",
       fields: [
-        { name: "benefitHeading", label: "Benefit heading", type: "text" },
-        { name: "benefitBody", label: "Benefit body", type: "textarea" },
         { name: "heading", label: "Closing heading", type: "text" },
         { name: "ctaText", label: "Button label", type: "text" },
         { name: "ctaLink", label: "Button link", type: "url" },
       ],
       defaults: {
-        benefitHeading: "Benefit",
-        benefitBody:
-          "Participants will gain valuable insights from experienced professionals, expand their network, and deepen their understanding of entrepreneurship through inspiring discussions and knowledge-sharing sessions",
         heading: "Ready to Discover New Insights?",
         ctaText: "Register Now!",
         ctaLink: "/",

@@ -30,8 +30,6 @@ const SeminarPage = async () => {
       <AboutSeminar details={details} />
       <SpeakerSeminar {...speakers} />
       <CtaSeminar
-        benefitHeading={cta.benefitHeading}
-        benefitBody={cta.benefitBody}
         heading={cta.heading}
         ctaText={cta.ctaText}
         ctaLink={cta.ctaLink}

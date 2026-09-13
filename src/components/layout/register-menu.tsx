@@ -1,27 +1,36 @@
 import { ChevronDown } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 import { Button } from "@/components/ui";
+import { isExternalHref } from "@/lib/utils";
 
-/** One row of the menu: an event, and the registration link it opens. */
+/** One row of the menu: an event, and the link it opens. */
 export type RegisterMenuOption = {
   label: string;
+  /** That event's own page by default; any URL the admin has set otherwise. */
   href: string;
   icon: string;
 };
 
+/** Shared by both link elements, so the two render identically. */
+const ROW =
+  "flex items-center gap-4 rounded-2xl px-4 py-3 text-base font-medium text-blue-100 transition-colors hover:bg-white/5 hover:text-white max-md:text-sm";
+
 /**
  * The hero's register button, opening a menu of the three events on hover.
  *
- * Each row opens that event's own registration link — the `ctaLink` its page's
- * Register button uses — rather than the page itself, so a reader who already
- * knows which event they want reaches the form in one step. The links are
- * passed in because they are content: `features/home/server/queries.ts` reads
- * them, and this component stays presentational.
+ * Each row goes to that event's own page by default, so a reader who has not
+ * chosen yet lands somewhere that explains the event. An editor can repoint any
+ * row at an external registration form in the admin (`home.register`), which is
+ * why the links are passed in: `features/home/server/queries.ts` reads them and
+ * this component stays presentational.
  *
- * Plain `<a target="_blank">`, not `next/link`: these are registration forms
- * on someone else's domain, and the event pages open the very same URLs the
- * same way.
+ * The two destinations need different markup, so each row picks per `href`. An
+ * internal path goes through `next/link` and opens in place — prefetched, no
+ * full reload. Anything with a scheme is someone else's site and opens in a new
+ * tab with `rel="noopener noreferrer"`, the same way the event pages open their
+ * own `ctaLink`.
  *
  * Same no-JavaScript mechanism as `Navbar/nav-dropdown.tsx`: `group-hover`
  * opens it for the pointer and `group-focus-within` for the keyboard, and the
@@ -60,12 +69,7 @@ export function RegisterMenu({
               key={option.label}
               className={index > 0 ? "border-t border-gold-500/20" : undefined}
             >
-              <a
-                href={option.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-4 rounded-2xl px-4 py-3 text-base font-medium text-blue-100 transition-colors hover:bg-white/5 hover:text-white max-md:text-sm"
-              >
+              <RegisterMenuLink href={option.href}>
                 {/* Decorative: the label beside it already names the event. */}
                 <Image
                   src={option.icon}
@@ -76,11 +80,39 @@ export function RegisterMenu({
                   className="h-7 w-7 shrink-0 object-contain"
                 />
                 {option.label}
-              </a>
+              </RegisterMenuLink>
             </li>
           ))}
         </ul>
       </div>
     </div>
+  );
+}
+
+/** One row's link element, chosen by where the `href` points. */
+function RegisterMenuLink({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) {
+  if (isExternalHref(href)) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={ROW}
+      >
+        {children}
+      </a>
+    );
+  }
+
+  return (
+    <Link href={href} className={ROW}>
+      {children}
+    </Link>
   );
 }

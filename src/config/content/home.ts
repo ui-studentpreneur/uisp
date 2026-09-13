@@ -1,3 +1,5 @@
+import { registerNav } from "../navigation";
+
 import { heroFields, speakerFields, type PageSpec } from "./types";
 
 /** Home page. Its timeline cards and connector are drawn by `TimelineTrack`. */
@@ -18,6 +20,19 @@ export const homePage: PageSpec = {
         ctaLink: "/register",
         image: "/hero.png",
       },
+    },
+    {
+      key: "home.register",
+      title: "Register menu",
+      fields: registerNav.map((option) => ({
+        name: option.field,
+        label: option.label,
+        type: "url" as const,
+        help: `Defaults to ${option.defaultHref}. Paste a full URL (https://…) to send this row to a registration form instead — external links open in a new tab.`,
+      })),
+      defaults: Object.fromEntries(
+        registerNav.map((option) => [option.field, option.defaultHref]),
+      ),
     },
     {
       key: "home.timeline",

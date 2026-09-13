@@ -42,15 +42,22 @@ export const mainNav: readonly NavItem[] = [
 /**
  * One event the hero's register menu offers.
  *
- * The destination is not a page: it is `ctaLink` on the named block, which is
- * the same registration URL that event's own Register button opens. Storing
- * the block key rather than the URL is what keeps the two in step — change the
- * form link in the admin once and both buttons follow.
+ * The destination is editable: `field` names this option's field in the
+ * `home.register` block, so an editor can repoint a row at an external
+ * registration form without touching code. `defaultHref` is the event's own
+ * page, which is where the row goes until someone does — a reader who has not
+ * decided yet lands on the page that explains the event rather than on a form.
+ *
+ * This list is the single source for the three rows: `config/content/home.ts`
+ * builds the block's fields and defaults from it, so adding an event here adds
+ * its admin field too.
  */
 export type RegisterOption = {
   label: string;
-  /** Block whose `ctaLink` this opens. */
-  block: string;
+  /** Field name inside the `home.register` block. */
+  field: string;
+  /** Where the row points until an editor overrides it. */
+  defaultHref: string;
   /** Path under `public/`. Already drawn in `blue-100`, same as the labels. */
   icon: string;
 };
@@ -58,17 +65,20 @@ export type RegisterOption = {
 export const registerNav: readonly RegisterOption[] = [
   {
     label: "Business Model Canvas Competition",
-    block: "competition.hero",
+    field: "competitionLink",
+    defaultHref: routes.competition,
     icon: "/regist2.svg",
   },
   {
     label: "National Seminar",
-    block: "seminar.hero",
+    field: "seminarLink",
+    defaultHref: routes.events.seminar,
     icon: "/regist3.svg",
   },
   {
     label: "Young Entrepreneur Summit",
-    block: "summit.hero",
+    field: "summitLink",
+    defaultHref: routes.events.youthEntrepreneurSummit,
     icon: "/regist1.svg",
   },
 ] as const;
