@@ -12,7 +12,7 @@ const AboutSeminar = ({ details }: { details: readonly EventDetailData[] }) => {
         aria-hidden
         width={0}
         height={0}
-        className="absolute top-0 right-0 w-100 max-md:w-50 h-auto object-cover z-0"
+        className="absolute top-0 right-0 w-100 max-md:w-50 max-md:-right-25 h-auto object-cover z-0"
       />
       <div className="size-100 z-0 rounded-full absolute blur-[500px]  left-0 bg-gold-500 -translate-x-1/2"></div>
 
